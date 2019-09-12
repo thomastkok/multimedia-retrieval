@@ -16,6 +16,6 @@ Packages for viewing 3D meshes.
 
 Packages for geometry/3D data processing.
 
-##[scikit-image](https://scikit-image.org)
+## [scikit-image](https://scikit-image.org)
 
 Package for image processing.
