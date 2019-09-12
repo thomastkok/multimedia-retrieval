@@ -16,10 +16,6 @@ Packages for viewing 3D meshes.
 
 Packages for geometry/3D data processing.
 
-## [occmodel](https://github.com/tenko/occmodel)
-
-Wrapper for the OCC format.
-
 ##[scikit-image](https://scikit-image.org)
 
 Package for image processing.
