@@ -24,7 +24,7 @@ def read_mesh(file_path):
     return mesh
 
 
-def read_dataset(dataset, file_path, n_meshes=None):
+def read_dataset(dataset, file_path=None, n_meshes=None):
     """
     Reads either the princeton or labeled dataset,
     located at the specified file path,
@@ -33,8 +33,13 @@ def read_dataset(dataset, file_path, n_meshes=None):
     meshes = {}
     n_meshes_loaded = 0
     if dataset == 'princeton':
+        if not file_path:
+            file_path = '..\\benchmark'
         file_path = file_path + '\\db'
-    elif dataset != 'labeled':
+    elif dataset == 'labeled':
+        if not file_path:
+            file_path = '..\\LabeledDB_new'
+    else:
         raise ValueError(f'{dataset} is not a known dataset, \
                          should be either "princeton" or "labeled"')
     for root, dirs, files in os.walk(file_path, topdown=True):
