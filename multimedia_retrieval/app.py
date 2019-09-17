@@ -1,12 +1,14 @@
 import open3d
 
-import multimedia_retrieval.datasets.datasets as datasets
+from multimedia_retrieval.datasets.datasets import read_dataset
+from multimedia_retrieval.processing.processing import normalization_tool
+from multimedia_retrieval.processing.helpers import unit_cube
 
 
 def run():
-    dataset = input('Please specify the dataset (princeton/labeled): ')
-    meshes = datasets.read_dataset(dataset, n_meshes=10)
-    print(meshes)
-    file_path = input('Please input the file path of the .OFF or .PLY file: ')
-    mesh = datasets.read_mesh(file_path)
-    open3d.visualization.draw_geometries([mesh])
+    meshes = read_dataset(dataset='princeton', n_meshes=10)
+    normalization_tool(meshes)
+    open3d.visualization.draw_geometries(
+        list(meshes.values()) +
+        [unit_cube]
+    )
