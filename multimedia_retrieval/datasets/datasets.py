@@ -34,11 +34,11 @@ def read_dataset(dataset, file_path=None, n_meshes=None):
     n_meshes_loaded = 0
     if dataset == 'princeton':
         if not file_path:
-            file_path = '..\\benchmark'
-        file_path = file_path + '\\db'
+            file_path = '../benchmark'
+        file_path = file_path + '/db'
     elif dataset == 'labeled':
         if not file_path:
-            file_path = '..\\LabeledDB_new'
+            file_path = '../LabeledDB_new'
     else:
         raise ValueError(f'{dataset} is not a known dataset, \
                          should be either "princeton" or "labeled"')
@@ -46,7 +46,7 @@ def read_dataset(dataset, file_path=None, n_meshes=None):
         if files:
             for file in files:
                 if file.endswith('.off'):
-                    mesh = read_mesh(root + '\\' + file)
+                    mesh = read_mesh(root + '/' + file)
                     index = file.split('.', 1)[0].replace('m', '')
                     meshes[index] = mesh
                     if n_meshes:
