@@ -6,4 +6,4 @@ from multimedia_retrieval.processing.processing import filter_meshes
 
 def run():
     dataset = input('Please specify the dataset (princeton/labeled): ')
-    filter_meshes(dataset, n_meshes=10)
+    filter_meshes(dataset, n_meshes=10, output_file='test.csv')
