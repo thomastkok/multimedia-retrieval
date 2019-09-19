@@ -1,5 +1,6 @@
 import os
 import sys
+import numpy as np
 
 # TODO: Hacky solution to solve import issues, fix in PEP8-friendly way
 sys.path.append(sys.path[0] + '/../datasets')
@@ -24,6 +25,7 @@ def get_class_name(file_name, dataset_name):
 
 
 def get_mesh_properties(files_classes):
+    mesh_props = {}
     for root, dirs, files in os.walk('../benchmark', topdown=True):
         # print('root', root)
         # print('dirs', dirs)
@@ -35,9 +37,18 @@ def get_mesh_properties(files_classes):
                     # get some properties from the mesh object
                     # create dict entry for each mesh with stats/properties
                     # add class to same dict entry
-                    read_mesh(root + '/' + elem)
+                    mesh = read_mesh(root + '/' + elem)
                     stripped_name = elem.split('.', 1)[0].replace('m', '')
                     class_label = files_classes[stripped_name]
+                    properties = {}
+                    properties['class'] = class_label
+                    properties['nr_faces'] = len(mesh.triangles)
+                    properties['nr_vertices'] = len(mesh.vertices)
+                    properties['faces_type'] = 'triangles' # by definition
+                    properties['bounding_box'] = mesh.get_axis_aligned_bounding_box()
+                    mesh_props[mesh] = properties
+                    print(f'{mesh} has properties: {properties}')
+    return mesh_props
 
 
 file_path = '../benchmark/classification/v1/base/'
