@@ -1,4 +1,9 @@
 import os
+import sys
+
+# TODO: Hacky solution to solve import issues, fix in PEP8-friendly way
+sys.path.append(sys.path[0] + '/../datasets')
+from datasets import read_mesh
 
 
 def get_class_name(file_name, dataset_name):
@@ -13,9 +18,8 @@ def get_class_name(file_name, dataset_name):
                 # First 0 means that it is a root class.
                 if len(split_line) > 2 and split_line[1] == '0':
                     last_class_name = split_line[0]
-                elif len(split_line) == 1:
-                    if is_int(split_line[0]):
-                        files_classes[split_line[0]] = last_class_name
+                elif len(split_line) == 1 and is_int(split_line[0]):
+                    files_classes[split_line[0]] = last_class_name
         return files_classes
 
 
@@ -23,7 +27,7 @@ def get_mesh_properties():
     for root, dirs, files in os.walk('../benchmark', topdown=True):
         # print('root', root)
         # print('dirs', dirs)
-        # print('files', files)      
+        # print('files', files)
         if files:
             for elem in files:
                 if elem.endswith('.off'):
@@ -43,6 +47,6 @@ def is_int(input):
     return True
 
 
-file_path = '/home/ruben/Desktop/benchmark/classification/v1/base/'
+file_path = '../benchmark/classification/v1/base/'
 get_class_name(file_path + 'test.cla', 'princeton')
 # get_class_name(file_path + 'train.cla', 'princeton')
