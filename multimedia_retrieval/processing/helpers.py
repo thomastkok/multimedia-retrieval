@@ -23,7 +23,7 @@ def get_class_name(file_name, dataset_name):
         return files_classes
 
 
-def get_mesh_properties():
+def get_mesh_properties(files_classes):
     for root, dirs, files in os.walk('../benchmark', topdown=True):
         # print('root', root)
         # print('dirs', dirs)
@@ -35,6 +35,7 @@ def get_mesh_properties():
                     # get some properties from the mesh object
                     # create dict entry for each mesh with stats/properties
                     # add class to same dict entry
+                    read_mesh(root + '/' + elem)
                     stripped_name = elem.split('.', 1)[0].replace('m', '')
                     class_label = files_classes[stripped_name]
 
@@ -48,5 +49,7 @@ def is_int(input):
 
 
 file_path = '../benchmark/classification/v1/base/'
-get_class_name(file_path + 'test.cla', 'princeton')
+files_classes = {**get_class_name(file_path + 'test.cla', 'princeton'),
+                 **get_class_name(file_path + 'train.cla', 'princeton')}
+get_mesh_properties(files_classes)
 # get_class_name(file_path + 'train.cla', 'princeton')
