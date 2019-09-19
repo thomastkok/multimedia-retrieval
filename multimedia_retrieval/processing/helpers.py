@@ -26,6 +26,9 @@ def scale_to_unit(mesh):
 
 
 def unit_cube():
+    """
+    Creates and returns a unit cube, centered around the origin.
+    """
     points = [[-0.5, -0.5, -0.5], [0.5, -0.5, -0.5], [-0.5, 0.5, -0.5],
               [0.5, 0.5, -0.5], [-0.5, -0.5, 0.5], [0.5, -0.5, 0.5],
               [-0.5, 0.5, 0.5], [0.5, 0.5, 0.5]]
