@@ -18,7 +18,7 @@ def get_class_name(file_name, dataset_name):
                 # First 0 means that it is a root class.
                 if len(split_line) > 2 and split_line[1] == '0':
                     last_class_name = split_line[0]
-                elif len(split_line) == 1 and is_int(split_line[0]):
+                elif len(split_line) == 1 and split_line[0].isdigit():
                     files_classes[split_line[0]] = last_class_name
         return files_classes
 
@@ -40,16 +40,7 @@ def get_mesh_properties(files_classes):
                     class_label = files_classes[stripped_name]
 
 
-def is_int(input):
-    try:
-        num = int(input)
-    except ValueError:
-        return False
-    return True
-
-
 file_path = '../benchmark/classification/v1/base/'
 files_classes = {**get_class_name(file_path + 'test.cla', 'princeton'),
                  **get_class_name(file_path + 'train.cla', 'princeton')}
 get_mesh_properties(files_classes)
-# get_class_name(file_path + 'train.cla', 'princeton')
