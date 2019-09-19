@@ -1,7 +1,9 @@
 import csv
 
 from multimedia_retrieval.processing.helpers import (get_classes,
-                                                     get_mesh_properties)
+                                                     get_mesh_properties,
+                                                     translate_to_origin,
+                                                     scale_to_unit)
 
 import multimedia_retrieval.import_tools
 from multimedia_retrieval.datasets.datasets import read_dataset
@@ -44,3 +46,9 @@ def filter_meshes(dataset, file_path=None, n_meshes=None, output_file=None):
         for mesh in mesh_properties.keys():
             print(f'The properties for mesh {mesh}:')
             print(str(mesh_properties[mesh]))
+
+
+def normalization_tool(meshes):
+    for mesh in meshes:
+        translate_to_origin(mesh)
+        scale_to_unit(mesh)

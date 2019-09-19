@@ -1,8 +1,7 @@
 import open3d
 
-import multimedia_retrieval.datasets.datasets as datasets
-from multimedia_retrieval.processing.processing import filter_meshes
-
+from multimedia_retrieval.processing.processing import normalization_tool, filter_meshes
+from multimedia_retrieval.processing.helpers import unit_cube
 
 def run():
     dataset = input('Please specify the dataset (princeton/labeled): ')
