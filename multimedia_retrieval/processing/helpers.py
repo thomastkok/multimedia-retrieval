@@ -2,8 +2,7 @@ import os
 import sys
 import numpy as np
 
-# TODO: Hacky solution to solve import issues, fix in PEP8-friendly way
-sys.path.append(sys.path[0] + '/../datasets')
+import import_tools
 from datasets import read_mesh
 
 
