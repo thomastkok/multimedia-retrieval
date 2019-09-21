@@ -2,6 +2,7 @@ import os
 import sys
 import numpy as np
 import open3d
+import statistics
 
 import multimedia_retrieval.import_tools
 from multimedia_retrieval.datasets.datasets import read_mesh
@@ -36,6 +37,15 @@ def get_classes(file_path, dataset):
         raise ValueError(f'Dataset {dataset} is not implemented')
     return classes
 
+# TODO:  average face area.
+
+
+def get_stat_property_names():
+    return ['nr_faces', 'nr_vertices',
+            'bounding_box_vol', 'centroid',
+            'nr_faces_n', 'nr_vertices_n',
+            'bounding_box_vol_n', 'centroid_n']
+
 
 def get_mesh_properties(meshes, classes):
     """
@@ -43,6 +53,7 @@ def get_mesh_properties(meshes, classes):
     and returns a dictionary with all meshes and properties.
     """
     mesh_props = {}
+
     for mesh_name in meshes.keys():
         properties = {}
         class_label = classes[mesh_name]
@@ -51,9 +62,54 @@ def get_mesh_properties(meshes, classes):
         properties['nr_faces'] = len(mesh.triangles)
         properties['nr_vertices'] = len(mesh.vertices)
         properties['face_type'] = 'triangles'  # by definition
-        properties['bounding_box'] = np.asarray(mesh.get_axis_aligned_bounding_box().get_box_points())
+        properties['bounding_box_vol'] = mesh.get_axis_aligned_bounding_box().volume()
+        properties['centroid'] = mesh.get_center()
+        # properties['bounding_box_'] = np.asarray(
+        #     mesh.get_axis_aligned_bounding_box().get_box_points())
         mesh_props[mesh_name] = properties
+
+    normalization_tool(meshes)
+    for mesh_name in meshes.keys():
+        properties = {}
+        mesh = meshes[mesh_name]
+        properties['nr_faces_n'] = len(mesh.triangles)
+        properties['nr_vertices_n'] = len(mesh.vertices)
+        properties['bounding_box_vol_n'] = mesh.get_axis_aligned_bounding_box().volume()
+        properties['centroid_n'] = mesh.get_center()
+        # properties['bounding_box_n'] = np.asarray(
+        #     mesh.get_axis_aligned_bounding_box().get_box_points())
+        mesh_props[mesh_name].update(properties)
+
     return mesh_props
+
+
+def get_stats(mesh_props):
+    # Get min, max and avg
+    mesh_stats = {}
+    mins = {}
+    maxs = {}
+    means = {}
+    for prop in get_stat_property_names():
+        numbers = [mesh_props[key][prop] for key in mesh_props]
+        if type(numbers[0]) is np.ndarray:
+            mean = np.mean(numbers, axis=0)
+            mn = np.min(numbers, axis=0)
+            mx = np.max(numbers, axis=0)
+            mins[prop] = mn
+            maxs[prop] = mx
+            means[prop] = mean
+        else:
+            mean = statistics.mean(numbers)
+            mn = min(numbers)
+            mx = max(numbers)
+            mins[prop] = mn
+            maxs[prop] = mx
+            means[prop] = mean
+
+    mesh_stats['min'] = mins
+    mesh_stats['max'] = maxs
+    mesh_stats['means'] = means
+    return mesh_stats
 
 
 def translate_to_origin(mesh):
@@ -92,3 +148,9 @@ def unit_cube():
     line_set.lines = open3d.utility.Vector2iVector(lines)
     line_set.colors = open3d.utility.Vector3dVector(colors)
     return line_set
+
+
+def normalization_tool(meshes):
+    for mesh in meshes.values():
+        translate_to_origin(mesh)
+        scale_to_unit(mesh)
