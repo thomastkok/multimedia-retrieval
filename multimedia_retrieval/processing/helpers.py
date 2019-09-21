@@ -51,7 +51,7 @@ def get_mesh_properties(meshes, classes):
         properties['nr_faces'] = len(mesh.triangles)
         properties['nr_vertices'] = len(mesh.vertices)
         properties['face_type'] = 'triangles'  # by definition
-        properties['bounding_box'] = mesh.get_axis_aligned_bounding_box()
+        properties['bounding_box'] = np.asarray(mesh.get_axis_aligned_bounding_box().get_box_points())
         mesh_props[mesh_name] = properties
     return mesh_props
 
