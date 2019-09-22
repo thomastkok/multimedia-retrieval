@@ -1,8 +1,5 @@
 import open3d
 import trimesh
-import networkx
-import pyglet
-import scipy
 
 
 def mesh_to_trimesh(mesh):
