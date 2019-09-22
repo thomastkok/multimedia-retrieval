@@ -58,6 +58,7 @@ def get_mesh_properties(meshes, classes):
         properties = {}
         class_label = classes[mesh_name]
         mesh = meshes[mesh_name]
+        
         properties['class'] = class_label
         properties['nr_faces'] = len(mesh.triangles)
         properties['nr_vertices'] = len(mesh.vertices)
@@ -108,7 +109,7 @@ def get_stats(mesh_props):
 
     mesh_stats['min'] = mins
     mesh_stats['max'] = maxs
-    mesh_stats['means'] = means
+    mesh_stats['average'] = means
     return mesh_stats
 
 

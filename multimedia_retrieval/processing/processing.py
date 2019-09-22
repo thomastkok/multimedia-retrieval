@@ -34,6 +34,7 @@ def filter_meshes(dataset, file_path=None, n_meshes=None, output_file=None):
         with open(output_file, mode='w', newline='') as file:
             writer = csv.writer(file, delimiter=',')
 
+            stat_properties = get_stat_property_names()
             properties = ['class', 'nr_faces', 'nr_vertices',
                           'face_type', 'bounding_box_vol', 'centroid',
                           'nr_faces_n', 'nr_vertices_n',
@@ -51,9 +52,21 @@ def filter_meshes(dataset, file_path=None, n_meshes=None, output_file=None):
                 for prop in properties:
                     row.append(m_properties[prop])
                 writer.writerow(row)
-            
-            print(mesh_stats)
-            
+
+            writer.writerow([])
+
+            for stat_key in mesh_stats.keys():
+                row = [stat_key]
+                stats = mesh_stats[stat_key]
+                for prop in properties:
+                    has_key = stats.get(prop)
+                    if has_key is None:
+                        row.append(-1)
+                    else:
+                        row.append(has_key)
+
+                writer.writerow(row)
+
     else:
         for mesh in mesh_properties.keys():
             print(f'The properties for mesh {mesh}:')

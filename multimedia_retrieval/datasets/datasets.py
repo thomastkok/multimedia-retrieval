@@ -4,12 +4,18 @@ import open3d
 import trimesh
 
 
-def read_mesh(file_path):
+from multimedia_retrieval.datasets.helpers import (mesh_to_trimesh,
+                                                   trimesh_to_mesh,
+                                                   refine_outliers)
+
+
+def read_mesh(file_path, dataset):
     """
     Reads the mesh file located at the specified file path,
     and returns the mesh as open3d object.
     """
     off = False
+    original_file_path = file_path
     if file_path.endswith('.off'):
         mesh = trimesh.load_mesh(file_path)
         trimesh.exchange.export.export_mesh(mesh, './temp.ply', 'ply')
@@ -21,6 +27,14 @@ def read_mesh(file_path):
         raise ValueError('Input file must be either .OFF or .PLY format')
     if off:
         os.remove('./temp.ply')
+    if len(mesh.triangles) < 100:
+        mesh = refine_outliers(mesh, original_file_path, True, True, dataset)
+    elif len(mesh.vertices) < 100:
+        mesh = refine_outliers(mesh, original_file_path, True, False, dataset)
+    elif len(mesh.triangles) > 50000:
+        mesh = refine_outliers(mesh, original_file_path, False, True, dataset)
+    elif len(mesh.vertices) > 50000:
+        mesh = refine_outliers(mesh, original_file_path, False, False, dataset)        
     return mesh
 
 
@@ -46,7 +60,7 @@ def read_dataset(dataset, file_path=None, n_meshes=None):
         if files:
             for file in files:
                 if file.endswith('.off'):
-                    mesh = read_mesh(root + '/' + file)
+                    mesh = read_mesh(root + '/' + file, dataset)
                     index = file.split('.', 1)[0].replace('m', '')
                     meshes[index] = mesh
                     if n_meshes:
