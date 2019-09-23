@@ -58,12 +58,13 @@ def get_mesh_properties(meshes, classes):
         properties = {}
         class_label = classes[mesh_name]
         mesh = meshes[mesh_name]
-        
+
         properties['class'] = class_label
         properties['nr_faces'] = len(mesh.triangles)
         properties['nr_vertices'] = len(mesh.vertices)
         properties['face_type'] = 'triangles'  # by definition
-        properties['bounding_box_vol'] = mesh.get_axis_aligned_bounding_box().volume()
+        properties['bounding_box_vol'] = \
+            mesh.get_axis_aligned_bounding_box().volume()
         properties['centroid'] = mesh.get_center()
         # properties['bounding_box_'] = np.asarray(
         #     mesh.get_axis_aligned_bounding_box().get_box_points())
@@ -75,7 +76,8 @@ def get_mesh_properties(meshes, classes):
         mesh = meshes[mesh_name]
         properties['nr_faces_n'] = len(mesh.triangles)
         properties['nr_vertices_n'] = len(mesh.vertices)
-        properties['bounding_box_vol_n'] = mesh.get_axis_aligned_bounding_box().volume()
+        properties['bounding_box_vol_n'] = \
+            mesh.get_axis_aligned_bounding_box().volume()
         properties['centroid_n'] = mesh.get_center()
         # properties['bounding_box_n'] = np.asarray(
         #     mesh.get_axis_aligned_bounding_box().get_box_points())

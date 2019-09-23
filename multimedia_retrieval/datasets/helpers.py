@@ -14,10 +14,10 @@ def trimesh_to_mesh(tri_mesh):
     return mesh
 
 
-def refine_outliers(mesh, file_path, is_small, is_triangles, dataset):
+def refine_outliers(mesh, file_path, is_small, dataset):
     """
-    Refines the outliers
-    By dividing the triangles or merging them using trimesh.
+    Refines the outliers,
+    by dividing the triangles or merging them using trimesh.
     """
 
     # open3d.visualization.draw_geometries([mesh])
@@ -26,13 +26,14 @@ def refine_outliers(mesh, file_path, is_small, is_triangles, dataset):
     tri_mesh = mesh_to_trimesh(mesh)
     refined_mesh = None
 
-    if is_small and is_triangles or is_small and not is_triangles:
+    if is_small:
         refined_mesh = tri_mesh.subdivide().subdivide()
-    elif not is_small and is_triangles or not is_small and not is_triangles:
+    else:
         if dataset == 'princeton':
-            tri_mesh.merge_vertices(2)
+            n = 2
         elif dataset == 'labeled':
-            tri_mesh.merge_vertices(1)
+            n = 1
+        tri_mesh.merge_vertices(n)
 
         # Removing faces which do not have 3 unique vertex indices.
         tri_mesh.remove_degenerate_faces()
@@ -45,7 +46,7 @@ def refine_outliers(mesh, file_path, is_small, is_triangles, dataset):
             len(refined_mesh.vertices) > 50000 or
             len(refined_mesh.triangles) < 100 or
             len(refined_mesh.triangles) > 50000):
-         
+
         print('Path', file_path)
         print('Triangles', len(refined_mesh.triangles))
         print('Vertices', len(refined_mesh.vertices))

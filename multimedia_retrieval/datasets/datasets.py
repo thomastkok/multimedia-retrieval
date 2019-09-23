@@ -27,14 +27,11 @@ def read_mesh(file_path, dataset):
         raise ValueError('Input file must be either .OFF or .PLY format')
     if off:
         os.remove('./temp.ply')
-    if len(mesh.triangles) < 100:
-        mesh = refine_outliers(mesh, original_file_path, True, True, dataset)
-    elif len(mesh.vertices) < 100:
-        mesh = refine_outliers(mesh, original_file_path, True, False, dataset)
-    elif len(mesh.triangles) > 50000:
-        mesh = refine_outliers(mesh, original_file_path, False, True, dataset)
-    elif len(mesh.vertices) > 50000:
-        mesh = refine_outliers(mesh, original_file_path, False, False, dataset)        
+    # misschien dit in een aparte functie zetten?
+    if len(mesh.triangles) < 100 or len(mesh.vertices) < 100:
+        mesh = refine_outliers(mesh, original_file_path, True, dataset)
+    elif len(mesh.triangles) > 50000 or len(mesh.triangles) > 50000:
+        mesh = refine_outliers(mesh, original_file_path, False, dataset)
     return mesh
 
 
