@@ -48,7 +48,7 @@ def filter_meshes(dataset, file_path=None, n_meshes=None, output_file=None):
             print(str(mesh_properties[mesh]))
 
 
-def normalization_tool(meshes):
+def normalization(meshes):
     for mesh in meshes:
         translate_to_origin(mesh)
         scale_to_unit(mesh)
