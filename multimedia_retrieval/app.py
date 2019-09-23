@@ -1,6 +1,7 @@
 import open3d
 
-from multimedia_retrieval.processing.processing import normalization_tool, filter_meshes
+from multimedia_retrieval.processing.processing import (normalization,
+                                                        filter_meshes)
 from multimedia_retrieval.processing.helpers import unit_cube
 
 
