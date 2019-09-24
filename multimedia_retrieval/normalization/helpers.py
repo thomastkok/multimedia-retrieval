@@ -24,3 +24,11 @@ def scale_to_unit(mesh):
         )
     factor = 0.5 / max(max(-mesh.get_min_bound()), max(mesh.get_max_bound()))
     mesh.scale(factor, center=True)
+
+
+def align_to_eigenvectors(mesh):
+    vertices = np.asarray(mesh.vertices)
+    eigenvectors = np.linalg.eigh(np.cov(vertices, rowvar=False))[1]
+    return np.stack([vertices @ eigenvectors[0],
+                     vertices @ eigenvectors[1],
+                     vertices @ eigenvectors[2]], axis=1)
