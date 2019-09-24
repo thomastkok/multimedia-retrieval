@@ -95,3 +95,11 @@ def unit_cube():
     line_set.lines = open3d.utility.Vector2iVector(lines)
     line_set.colors = open3d.utility.Vector3dVector(colors)
     return line_set
+
+
+def align_to_eigenvectors(mesh):
+    vertices = np.asarray(mesh.vertices)
+    eigenvectors = np.linalg.eigh(np.cov(vertices, rowvar=False))[1]
+    return np.stack([vertices @ eigenvectors[0],
+                     vertices @ eigenvectors[1],
+                     vertices @ eigenvectors[2]], axis=1)
