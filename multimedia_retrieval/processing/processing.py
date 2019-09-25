@@ -16,13 +16,15 @@ from multimedia_retrieval.datasets.helpers import (get_classes)
 from multimedia_retrieval.datasets.datasets import read_dataset
 
 
-def check_outliers(meshes, dataset):
+def check_outliers(meshes, face_average, dataset, offset):
+    lower_bound = face_average * (1/offset)
+    upper_bound = face_average * offset
     for mesh_key in meshes.keys():
         mesh = meshes[mesh_key]
-        if len(mesh.triangles) < 100 or len(mesh.vertices) < 100:
-            mesh = refine_outliers(mesh, True, dataset)
-        elif len(mesh.triangles) > 50000 or len(mesh.triangles) > 50000:
-            mesh = refine_outliers(mesh, False, dataset)
+        if len(mesh.triangles) < lower_bound or len(mesh.vertices) < lower_bound:
+            mesh = refine_outliers(mesh, face_average, lower_bound, upper_bound, True, dataset)
+        elif len(mesh.triangles) > upper_bound or len(mesh.triangles) > upper_bound:
+            mesh = refine_outliers(mesh, face_average, lower_bound, upper_bound, False, dataset)
 
         meshes[mesh_key] = mesh
 
@@ -47,12 +49,11 @@ def filter_meshes(dataset, file_path=None, n_meshes=None, output_file=None):
     mesh_properties = get_mesh_properties(meshes, classes)
     mesh_stats = get_stats(mesh_properties)
 
+    avg_faces = int(mesh_stats['avg']['nr_faces'])
 
-    mesh_outliers = check_outliers(meshes, dataset)
+    mesh_outliers = check_outliers(meshes, avg_faces, dataset, 1.3)
     mesh_properties = get_mesh_properties(meshes, classes)
     mesh_stats = get_stats(mesh_properties)
-    
-    print(mesh_outliers)
 
     if output_file and not output_file.endswith('.csv'):
         raise ValueError(f'Output file ({output_file}) should end with .csv')

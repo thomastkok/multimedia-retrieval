@@ -79,7 +79,7 @@ def get_stats(mesh_props):
 
     mesh_stats['min'] = mins
     mesh_stats['max'] = maxs
-    mesh_stats['average'] = means
+    mesh_stats['avg'] = means
     return mesh_stats
 
 
@@ -139,39 +139,38 @@ def trimesh_to_mesh(tri_mesh):
     return mesh
 
 
-def refine_outliers(mesh, is_small, dataset):
+def draw_mesh(mesh):
+    open3d.visualization.draw_geometries([mesh])
+
+
+def refine_outliers(mesh, face_average, lb, ub, is_small, dataset):
     """
     Refines the outliers,
     by dividing the triangles or merging them using trimesh.
     """
 
-    # open3d.visualization.draw_geometries([mesh])
-    # tri_mesh.show();
-
-    tri_mesh = mesh_to_trimesh(mesh)
-    refined_mesh = None
-
     if is_small:
-        print(len(tri_mesh.triangles))
-        refined_mesh = tri_mesh.subdivide().subdivide()
+        rnd = 0
+        while len(mesh.triangles) < lb:
+            mesh = mesh.subdivide_midpoint()
+
+        if len(mesh.triangles) > ub:
+            mesh = mesh.simplify_quadric_decimation(face_average)
     else:
-        if dataset == 'princeton':
-            n = 2
-        elif dataset == 'labeled':
-            n = 1
-        tri_mesh.merge_vertices(n)
+        mesh = mesh.simplify_quadric_decimation(face_average)
 
+        # print('After decimation', len(mesh.vertices))
+        # print('After decimation', len(mesh.triangles))
+
+        # Some processing.
         # Removing faces which do not have 3 unique vertex indices.
-        tri_mesh.remove_degenerate_faces()
-        tri_mesh.remove_duplicate_faces()
-        refined_mesh = tri_mesh
+        # Only removes a small portion of triangles and vertices.
 
-    return trimesh_to_mesh(refined_mesh)
+        mesh = mesh.remove_degenerate_triangles()
+        mesh = mesh.remove_duplicated_triangles()
+        mesh = mesh.remove_duplicated_vertices()
+        mesh = mesh.remove_unreferenced_vertices()
 
-    if (len(refined_mesh.vertices) < 100 or
-            len(refined_mesh.vertices) > 50000 or
-            len(refined_mesh.triangles) < 100 or
-            len(refined_mesh.triangles) > 50000):
+        # open3d.visualization.draw_geometries([mesh])
 
-        print('Triangles', len(refined_mesh.triangles))
-        print('Vertices', len(refined_mesh.vertices))
+    return mesh
