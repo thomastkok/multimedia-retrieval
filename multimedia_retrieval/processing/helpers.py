@@ -1,4 +1,5 @@
 import numpy as np
+import sys
 import open3d
 import trimesh
 import statistics
@@ -54,7 +55,25 @@ def get_mesh_properties(meshes, classes):
     return mesh_props
 
 
+def get_average_obj(avg_vertices, avg_faces, mesh_props):
+
+    closest_obj = sys.maxsize
+    closest_mesh_id = -1
+
+
+    for mesh_key in mesh_props.keys():
+        vertices = mesh_props[mesh_key]['nr_vertices']
+        faces = mesh_props[mesh_key]['nr_faces']
+        dist = abs(vertices - avg_vertices) + abs(faces - avg_faces)
+        if dist < closest_obj:
+            closest_obj = dist
+            closest_mesh_id = mesh_key
+
+    return (closest_obj, closest_mesh_id)        
+        
+
 def get_stats(mesh_props):
+
     # Get min, max and avg
     mesh_stats = {}
     mins = {}
