@@ -1,14 +1,32 @@
 import csv
+import multimedia_retrieval.import_tools
 
-from multimedia_retrieval.processing.helpers import (get_classes,
-                                                     get_mesh_properties,
+
+from multimedia_retrieval.processing.helpers import (get_mesh_properties,
                                                      translate_to_origin,
                                                      scale_to_unit,
                                                      get_stat_property_names,
-                                                     get_stats)
+                                                     get_stats,
+                                                     mesh_to_trimesh,
+                                                     trimesh_to_mesh,
+                                                     refine_outliers)
 
-import multimedia_retrieval.import_tools
+from multimedia_retrieval.datasets.helpers import (get_classes)
+
 from multimedia_retrieval.datasets.datasets import read_dataset
+
+
+def check_outliers(meshes, dataset):
+    for mesh_key in meshes.keys():
+        mesh = meshes[mesh_key]
+        if len(mesh.triangles) < 100 or len(mesh.vertices) < 100:
+            mesh = refine_outliers(mesh, True, dataset)
+        elif len(mesh.triangles) > 50000 or len(mesh.triangles) > 50000:
+            mesh = refine_outliers(mesh, False, dataset)
+
+        meshes[mesh_key] = mesh
+
+    return meshes
 
 
 def filter_meshes(dataset, file_path=None, n_meshes=None, output_file=None):
@@ -28,6 +46,14 @@ def filter_meshes(dataset, file_path=None, n_meshes=None, output_file=None):
     meshes = read_dataset(dataset, file_path, n_meshes)
     mesh_properties = get_mesh_properties(meshes, classes)
     mesh_stats = get_stats(mesh_properties)
+
+
+    mesh_outliers = check_outliers(meshes, dataset)
+    mesh_properties = get_mesh_properties(meshes, classes)
+    mesh_stats = get_stats(mesh_properties)
+    
+    print(mesh_outliers)
+
     if output_file and not output_file.endswith('.csv'):
         raise ValueError(f'Output file ({output_file}) should end with .csv')
     elif output_file:
