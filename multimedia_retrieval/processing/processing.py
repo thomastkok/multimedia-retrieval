@@ -28,8 +28,6 @@ def check_outliers(meshes, face_average, dataset, offset):
 
         meshes[mesh_key] = mesh
 
-    return meshes
-
 
 def filter_meshes(dataset, file_path=None, n_meshes=None, output_file=None):
     """
@@ -51,7 +49,7 @@ def filter_meshes(dataset, file_path=None, n_meshes=None, output_file=None):
 
     avg_faces = int(mesh_stats['avg']['nr_faces'])
 
-    mesh_outliers = check_outliers(meshes, avg_faces, dataset, 1.3)
+    check_outliers(meshes, avg_faces, dataset, 1.3)
     mesh_properties = get_mesh_properties(meshes, classes)
     mesh_stats = get_stats(mesh_properties)
 
