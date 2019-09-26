@@ -151,7 +151,7 @@ def trimesh_to_mesh(tri_mesh):
     return mesh
 
 
-def refine_outliers(mesh, face_average, lb, ub, is_small, dataset):
+def refine_outliers(mesh, face_average, lb, ub, is_small):
     """
     Refines the outliers,
     by dividing the triangles or merging them using trimesh.

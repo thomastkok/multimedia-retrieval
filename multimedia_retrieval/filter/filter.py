@@ -31,7 +31,7 @@ def filter_meshes(dataset, file_path=None, n_meshes=None,
     output_filter(output_file, mesh_properties, mesh_stats)
 
 
-def fix_outliers(meshes, face_average, dataset, offset=1.3):
+def fix_outliers(meshes, face_average, offset=1.3):
     lower_bound = face_average * (1/offset)
     upper_bound = face_average * offset
     for mesh_key in meshes.keys():
@@ -39,11 +39,11 @@ def fix_outliers(meshes, face_average, dataset, offset=1.3):
         if (len(mesh.triangles) < lower_bound or
            len(mesh.vertices) < lower_bound):
             mesh = refine_outliers(
-                mesh, face_average, lower_bound, upper_bound, True, dataset)
+                mesh, face_average, lower_bound, upper_bound, True)
         elif (len(mesh.triangles) > upper_bound or
               len(mesh.triangles) > upper_bound):
             mesh = refine_outliers(
-                mesh, face_average, lower_bound, upper_bound, False, dataset)
+                mesh, face_average, lower_bound, upper_bound, False)
         meshes[mesh_key] = mesh
 
 
