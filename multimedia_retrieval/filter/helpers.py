@@ -5,8 +5,7 @@ import trimesh
 import statistics
 import csv
 
-import multimedia_retrieval.import_tools
-from multimedia_retrieval.datasets.datasets import read_mesh
+from ..datasets.datasets import read_mesh
 from multimedia_retrieval.normalization.normalization import normalization
 
 

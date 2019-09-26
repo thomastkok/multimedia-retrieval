@@ -1,4 +1,4 @@
-from multimedia_retrieval.normalization.helpers import (
+from .helpers import (
     translate_to_origin, scale_to_unit
 )
 

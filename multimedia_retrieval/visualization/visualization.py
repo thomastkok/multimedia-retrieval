@@ -1,5 +1,5 @@
 import open3d
-from multimedia_retrieval.visualization.helpers import unit_cube
+from .helpers import unit_cube
 
 
 def draw_mesh(mesh, draw_unit_cube=False):
