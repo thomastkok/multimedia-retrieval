@@ -83,9 +83,7 @@ def output_filter(output_file, mesh_properties, mesh_stats):
 
 def get_stat_property_names():
     return ['nr_faces', 'nr_vertices',
-            'bounding_box_vol', 'centroid',
-            'nr_faces_n', 'nr_vertices_n',
-            'bounding_box_vol_n', 'centroid_n']
+            'bounding_box_vol', 'centroid']
 
 
 def get_mesh_properties(meshes, classes):

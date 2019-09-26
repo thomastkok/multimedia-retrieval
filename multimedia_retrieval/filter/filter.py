@@ -1,6 +1,6 @@
 from multimedia_retrieval.filter.helpers import (
-    get_classes, output_filter, fix_outliers,
-    refine_outliers, get_average_obj, get_mesh_properties,
+    get_classes, output_filter,
+    refine_outliers, get_mesh_properties,
     get_stat_property_names, get_stats,
     mesh_to_trimesh, trimesh_to_mesh
 )
