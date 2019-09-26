@@ -81,21 +81,6 @@ def output_filter(output_file, mesh_properties, mesh_stats):
             print(str(mesh_properties[mesh]))
 
 
-def fix_outliers(meshes, face_average, dataset, offset):
-    lower_bound = face_average * (1/offset)
-    upper_bound = face_average * offset
-    for mesh_key in meshes.keys():
-        mesh = meshes[mesh_key]
-        if len(mesh.triangles) < lower_bound or len(mesh.vertices) < lower_bound:
-            mesh = refine_outliers(
-                mesh, face_average, lower_bound, upper_bound, True, dataset)
-        elif len(mesh.triangles) > upper_bound or len(mesh.triangles) > upper_bound:
-            mesh = refine_outliers(
-                mesh, face_average, lower_bound, upper_bound, False, dataset)
-
-        meshes[mesh_key] = mesh
-
-
 def get_stat_property_names():
     return ['nr_faces', 'nr_vertices',
             'bounding_box_vol', 'centroid',
@@ -124,34 +109,7 @@ def get_mesh_properties(meshes, classes):
         properties['centroid'] = mesh.get_center()
         mesh_props[mesh_name] = properties
 
-    normalization(meshes.values())
-    for mesh_name in meshes.keys():
-        properties = {}
-        mesh = meshes[mesh_name]
-        properties['nr_faces_n'] = len(mesh.triangles)
-        properties['nr_vertices_n'] = len(mesh.vertices)
-        properties['bounding_box_vol_n'] = \
-            mesh.get_axis_aligned_bounding_box().volume()
-        properties['centroid_n'] = mesh.get_center()
-        mesh_props[mesh_name].update(properties)
-
     return mesh_props
-
-
-def get_average_obj(avg_vertices, avg_faces, mesh_props):
-
-    closest_obj = sys.maxsize
-    closest_mesh_id = -1
-
-    for mesh_key in mesh_props.keys():
-        vertices = mesh_props[mesh_key]['nr_vertices']
-        faces = mesh_props[mesh_key]['nr_faces']
-        dist = abs(vertices - avg_vertices) + abs(faces - avg_faces)
-        if dist < closest_obj:
-            closest_obj = dist
-            closest_mesh_id = mesh_key
-
-    return (closest_obj, closest_mesh_id)
 
 
 def get_stats(mesh_props):

@@ -7,7 +7,8 @@ from multimedia_retrieval.filter.helpers import (
 from multimedia_retrieval.datasets.datasets import read_dataset
 
 
-def filter_meshes(dataset, file_path=None, n_meshes=None, output_file=None):
+def filter_meshes(dataset, file_path=None, n_meshes=None,
+                  meshes=None, output_file=None):
     """
     Checks all (or n) shapes in the given dataset,
     and outputs a set of properties for each shape.
@@ -22,24 +23,43 @@ def filter_meshes(dataset, file_path=None, n_meshes=None, output_file=None):
         raise ValueError(f'Dataset {dataset} is not implemented')
 
     classes = get_classes(file_path, dataset)
-    meshes = read_dataset(dataset, file_path, n_meshes)
-    mesh_properties = get_mesh_properties(meshes, classes)
-    mesh_stats = get_stats(mesh_properties)
-
-    avg_faces = int(mesh_stats['avg']['nr_faces'])
-    avg_vertices = int(mesh_stats['avg']['nr_vertices'])
-
-    closest_obj, closest_id = get_average_obj(
-                                avg_vertices, avg_faces,
-                                mesh_properties
-                              )
-
-    print(closest_obj)
-    print(closest_id)
-
-    fix_outliers(meshes, avg_faces, dataset, 1.3)
-
+    if not meshes:
+        meshes = read_dataset(dataset, file_path, n_meshes)
     mesh_properties = get_mesh_properties(meshes, classes)
     mesh_stats = get_stats(mesh_properties)
 
     output_filter(output_file, mesh_properties, mesh_stats)
+
+
+def fix_outliers(meshes, face_average, dataset, offset=1.3):
+    lower_bound = face_average * (1/offset)
+    upper_bound = face_average * offset
+    for mesh_key in meshes.keys():
+        mesh = meshes[mesh_key]
+        if (len(mesh.triangles) < lower_bound or
+           len(mesh.vertices) < lower_bound):
+            mesh = refine_outliers(
+                mesh, face_average, lower_bound, upper_bound, True, dataset)
+        elif (len(mesh.triangles) > upper_bound or
+              len(mesh.triangles) > upper_bound):
+            mesh = refine_outliers(
+                mesh, face_average, lower_bound, upper_bound, False, dataset)
+        meshes[mesh_key] = mesh
+
+
+def get_average_obj(mesh_stats, mesh_props):
+    avg_faces = int(mesh_stats['avg']['nr_faces'])
+    avg_vertices = int(mesh_stats['avg']['nr_vertices'])
+
+    closest_obj = sys.maxsize
+    closest_mesh_id = -1
+
+    for mesh_key in mesh_props.keys():
+        vertices = mesh_props[mesh_key]['nr_vertices']
+        faces = mesh_props[mesh_key]['nr_faces']
+        dist = abs(vertices - avg_vertices) + abs(faces - avg_faces)
+        if dist < closest_obj:
+            closest_obj = dist
+            closest_mesh_id = mesh_key
+
+    return (closest_obj, closest_mesh_id)
