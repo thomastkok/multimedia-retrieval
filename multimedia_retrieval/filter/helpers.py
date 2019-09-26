@@ -138,18 +138,6 @@ def get_stats(mesh_props):
     return mesh_stats
 
 
-def mesh_to_trimesh(mesh):
-    open3d.io.write_triangle_mesh("temp.ply", mesh)
-    tri_mesh = trimesh.load_mesh("temp.ply")
-    return tri_mesh
-
-
-def trimesh_to_mesh(tri_mesh):
-    trimesh.exchange.export.export_mesh(tri_mesh, 'temp.ply', 'ply')
-    mesh = open3d.io.read_triangle_mesh('temp.ply')
-    return mesh
-
-
 def refine_outliers(mesh, face_average, lb, ub, is_small):
     """
     Refines the outliers,
