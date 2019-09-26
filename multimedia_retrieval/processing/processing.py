@@ -4,7 +4,8 @@ from multimedia_retrieval.processing.helpers import (get_classes,
                                                      get_mesh_properties,
                                                      translate_to_origin,
                                                      scale_to_unit,
-                                                     align_to_eigenvectors)
+                                                     align_to_eigenvectors,
+                                                     flip_to_moment)
 
 import multimedia_retrieval.import_tools
 from multimedia_retrieval.datasets.datasets import read_dataset
@@ -52,6 +53,6 @@ def filter_meshes(dataset, file_path=None, n_meshes=None, output_file=None):
 def normalization(meshes):
     for mesh in meshes:
         translate_to_origin(mesh)
-        scale_to_unit(mesh)
         mesh = align_to_eigenvectors(mesh)
-        # TODO: flip according to moment test
+        mesh = flip_to_moment(mesh)
+        scale_to_unit(mesh)

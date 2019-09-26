@@ -98,8 +98,23 @@ def unit_cube():
 
 
 def align_to_eigenvectors(mesh):
+    """
+    Calculates the covariance matrix,
+    and aligns the mesh to its eigenvectors.
+    """
     vertices = np.asarray(mesh.vertices)
     eigenvectors = np.linalg.eigh(np.cov(vertices, rowvar=False))[1]
-    return np.stack([vertices @ eigenvectors[0],
-                     vertices @ eigenvectors[1],
-                     vertices @ eigenvectors[2]], axis=1)
+    mesh.vertices = open3d.utility.Vector3dVector(
+                        np.stack([vertices @ eigenvectors[0],
+                                  vertices @ eigenvectors[1],
+                                  vertices @ eigenvectors[2]], axis=1))
+    return mesh
+    # return np.stack([vertices @ eigenvectors[0],
+    #                  vertices @ eigenvectors[1],
+    #                  vertices @ eigenvectors[2]], axis=1)
+
+
+def flip_to_moment(mesh):
+    centroid = mesh.get_center()
+    print(centroid)
+    return mesh
