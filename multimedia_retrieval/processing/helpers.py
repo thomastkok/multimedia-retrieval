@@ -69,8 +69,8 @@ def get_average_obj(avg_vertices, avg_faces, mesh_props):
             closest_obj = dist
             closest_mesh_id = mesh_key
 
-    return (closest_obj, closest_mesh_id)        
-        
+    return (closest_obj, closest_mesh_id)
+  
 
 def get_stats(mesh_props):
 
@@ -127,6 +127,9 @@ def scale_to_unit(mesh):
 
 
 def unit_cube():
+    """
+    Creates and returns a unit cube, centered around the origin.
+    """
     points = [[-0.5, -0.5, -0.5], [0.5, -0.5, -0.5], [-0.5, 0.5, -0.5],
               [0.5, 0.5, -0.5], [-0.5, -0.5, 0.5], [0.5, -0.5, 0.5],
               [-0.5, 0.5, 0.5], [0.5, 0.5, 0.5]]
