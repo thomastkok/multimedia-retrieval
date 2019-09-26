@@ -5,7 +5,9 @@ import trimesh
 import statistics
 
 import multimedia_retrieval.import_tools
+
 from multimedia_retrieval.datasets.datasets import read_mesh
+from multimedia_retrieval.processing.processing import normalization
 
 
 # TODO:  average face area.
@@ -39,7 +41,7 @@ def get_mesh_properties(meshes, classes):
         #     mesh.get_axis_aligned_bounding_box().get_box_points())
         mesh_props[mesh_name] = properties
 
-    normalization_tool(meshes)
+    normalization(meshes)
     for mesh_name in meshes.keys():
         properties = {}
         mesh = meshes[mesh_name]
@@ -141,12 +143,6 @@ def unit_cube():
     line_set.lines = open3d.utility.Vector2iVector(lines)
     line_set.colors = open3d.utility.Vector3dVector(colors)
     return line_set
-
-
-def normalization_tool(meshes):
-    for mesh in meshes.values():
-        translate_to_origin(mesh)
-        scale_to_unit(mesh)
 
 
 def mesh_to_trimesh(mesh):
