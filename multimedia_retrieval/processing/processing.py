@@ -10,7 +10,8 @@ from multimedia_retrieval.processing.helpers import (get_mesh_properties,
                                                      mesh_to_trimesh,
                                                      trimesh_to_mesh,
                                                      refine_outliers,
-                                                     get_average_obj)
+                                                     get_average_obj,
+                                                     draw_mesh)
 
 from multimedia_retrieval.datasets.helpers import (get_classes)
 
@@ -58,9 +59,10 @@ def filter_meshes(dataset, file_path=None, n_meshes=None, output_file=None):
     print(closest_obj)
     print(closest_id)
 
-    # fix_outliers(meshes, avg_faces, dataset, 1.3)
-    # mesh_properties = get_mesh_properties(meshes, classes)
-    # mesh_stats = get_stats(mesh_properties)
+    fix_outliers(meshes, avg_faces, dataset, 1.3)
+
+    mesh_properties = get_mesh_properties(meshes, classes)
+    mesh_stats = get_stats(mesh_properties)
 
     if output_file and not output_file.endswith('.csv'):
         raise ValueError(f'Output file ({output_file}) should end with .csv')

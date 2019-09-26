@@ -168,6 +168,8 @@ def refine_outliers(mesh, face_average, lb, ub, is_small, dataset):
     by dividing the triangles or merging them using trimesh.
     """
 
+    # draw_mesh(mesh)
+
     if is_small:
         rnd = 0
         while len(mesh.triangles) < lb:
@@ -181,15 +183,15 @@ def refine_outliers(mesh, face_average, lb, ub, is_small, dataset):
         # print('After decimation', len(mesh.vertices))
         # print('After decimation', len(mesh.triangles))
 
-        # Some processing.
-        # Removing faces which do not have 3 unique vertex indices.
-        # Only removes a small portion of triangles and vertices.
+    # Some post-processing.
+    # Removing faces which do not have 3 unique vertex indices.
+    # Only removes a small portion of triangles and vertices.
 
-        mesh = mesh.remove_degenerate_triangles()
-        mesh = mesh.remove_duplicated_triangles()
-        mesh = mesh.remove_duplicated_vertices()
-        mesh = mesh.remove_unreferenced_vertices()
+    mesh = mesh.remove_degenerate_triangles()
+    mesh = mesh.remove_duplicated_triangles()
+    mesh = mesh.remove_duplicated_vertices()
+    mesh = mesh.remove_unreferenced_vertices()
 
-        # open3d.visualization.draw_geometries([mesh])
+    # draw_mesh(mesh)
 
     return mesh
