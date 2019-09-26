@@ -3,14 +3,99 @@ import sys
 import open3d
 import trimesh
 import statistics
+import csv
 
 import multimedia_retrieval.import_tools
-
 from multimedia_retrieval.datasets.datasets import read_mesh
-from multimedia_retrieval.processing.processing import normalization
+from multimedia_retrieval.normalization.normalization import normalization
 
 
-# TODO:  average face area.
+def get_classes(file_path, dataset):
+    """
+    Generates dictionary with class label for each mesh,
+    and returns it.
+    """
+    classes = {}
+    if dataset == 'princeton':
+        for file in (file_path + '/classification/v1/base/test.cla',
+                     file_path + '/classification/v1/base/train.cla'):
+            with open(file) as f:
+                lines = f.readlines()
+                last_class_name = ''
+                for line in lines:
+                    split_line = line.split()
+                    # First 0 means that it is a root class
+                    if len(split_line) > 2 and split_line[1] == '0':
+                        last_class_name = split_line[0]
+                    elif len(split_line) == 1 and split_line[0].isdigit():
+                        classes[split_line[0]] = last_class_name
+    elif dataset == 'labeled':
+        for root, dirs, files in os.walk(file_path, topdown=True):
+            for file in files:
+                if file.endswith('.off'):
+                    index = file.split('.', 1)[0].replace('m', '')
+                    classes[index] = os.path.basename(root)
+    else:
+        raise ValueError(f'Dataset {dataset} is not implemented')
+    return classes
+
+
+def output_filter(output_file, mesh_properties, mesh_stats):
+    if output_file and not output_file.endswith('.csv'):
+        raise ValueError(f'Output file ({output_file}) should end with .csv')
+    elif output_file:
+        with open(output_file, mode='w', newline='') as file:
+            writer = csv.writer(file, delimiter=',')
+
+            properties = ['class'] + get_stat_property_names()
+            writer.writerow(['Mesh', 'Class', 'Number of faces',
+                             'Number of vertices', 'Type of faces',
+                             'Bounding box volume', 'Centroid',
+                             'Normalized number of faces',
+                             'Normalized number of vertices',
+                             'Normalized bounding box volume',
+                             'Normalized centroid'])
+            for mesh in mesh_properties.keys():
+                row = [mesh]
+                m_properties = mesh_properties[mesh]
+                for prop in properties:
+                    row.append(m_properties[prop])
+                writer.writerow(row)
+
+            writer.writerow([])
+
+            for stat_key in mesh_stats.keys():
+                row = [stat_key]
+                stats = mesh_stats[stat_key]
+                for prop in properties:
+                    has_key = stats.get(prop)
+                    if has_key is None:
+                        row.append(-1)
+                    else:
+                        row.append(has_key)
+
+                writer.writerow(row)
+    else:
+        for mesh in mesh_properties.keys():
+            print(f'The properties for mesh {mesh}:')
+            print(str(mesh_properties[mesh]))
+
+
+def fix_outliers(meshes, face_average, dataset, offset):
+    lower_bound = face_average * (1/offset)
+    upper_bound = face_average * offset
+    for mesh_key in meshes.keys():
+        mesh = meshes[mesh_key]
+        if len(mesh.triangles) < lower_bound or len(mesh.vertices) < lower_bound:
+            mesh = refine_outliers(
+                mesh, face_average, lower_bound, upper_bound, True, dataset)
+        elif len(mesh.triangles) > upper_bound or len(mesh.triangles) > upper_bound:
+            mesh = refine_outliers(
+                mesh, face_average, lower_bound, upper_bound, False, dataset)
+
+        meshes[mesh_key] = mesh
+
+
 def get_stat_property_names():
     return ['nr_faces', 'nr_vertices',
             'bounding_box_vol', 'centroid',
@@ -37,11 +122,9 @@ def get_mesh_properties(meshes, classes):
         properties['bounding_box_vol'] = \
             mesh.get_axis_aligned_bounding_box().volume()
         properties['centroid'] = mesh.get_center()
-        # properties['bounding_box_'] = np.asarray(
-        #     mesh.get_axis_aligned_bounding_box().get_box_points())
         mesh_props[mesh_name] = properties
 
-    normalization(meshes)
+    normalization(meshes.values())
     for mesh_name in meshes.keys():
         properties = {}
         mesh = meshes[mesh_name]
@@ -50,8 +133,6 @@ def get_mesh_properties(meshes, classes):
         properties['bounding_box_vol_n'] = \
             mesh.get_axis_aligned_bounding_box().volume()
         properties['centroid_n'] = mesh.get_center()
-        # properties['bounding_box_n'] = np.asarray(
-        #     mesh.get_axis_aligned_bounding_box().get_box_points())
         mesh_props[mesh_name].update(properties)
 
     return mesh_props
@@ -62,7 +143,6 @@ def get_average_obj(avg_vertices, avg_faces, mesh_props):
     closest_obj = sys.maxsize
     closest_mesh_id = -1
 
-
     for mesh_key in mesh_props.keys():
         vertices = mesh_props[mesh_key]['nr_vertices']
         faces = mesh_props[mesh_key]['nr_faces']
@@ -72,10 +152,9 @@ def get_average_obj(avg_vertices, avg_faces, mesh_props):
             closest_mesh_id = mesh_key
 
     return (closest_obj, closest_mesh_id)
-  
+
 
 def get_stats(mesh_props):
-
     # Get min, max and avg
     mesh_stats = {}
     mins = {}
@@ -104,47 +183,6 @@ def get_stats(mesh_props):
     return mesh_stats
 
 
-def translate_to_origin(mesh):
-    """
-    Translates the mesh,
-    such that its centroid coincides with the coordinate-frame origin.
-    """
-    mesh.translate(-mesh.get_center())
-
-
-def scale_to_unit(mesh):
-    """
-    Scales the mesh,
-    such that it fits tightly in a unit-sized cube.
-
-    The mesh must be located at the origin.
-    """
-    center = mesh.get_center()
-    if center[0] > 0.001 or center[1] > 0.001 or center[2] > 0.001:
-        raise ValueError(
-            f'Mesh must be centered around the origin, not {center}'
-        )
-    factor = 0.5 / max(max(-mesh.get_min_bound()), max(mesh.get_max_bound()))
-    mesh.scale(factor, center=True)
-
-
-def unit_cube():
-    """
-    Creates and returns a unit cube, centered around the origin.
-    """
-    points = [[-0.5, -0.5, -0.5], [0.5, -0.5, -0.5], [-0.5, 0.5, -0.5],
-              [0.5, 0.5, -0.5], [-0.5, -0.5, 0.5], [0.5, -0.5, 0.5],
-              [-0.5, 0.5, 0.5], [0.5, 0.5, 0.5]]
-    lines = [[0, 1], [0, 2], [1, 3], [2, 3], [4, 5], [4, 6], [5, 7], [6, 7],
-             [0, 4], [1, 5], [2, 6], [3, 7]]
-    colors = [[0, 0, 0] for i in range(len(lines))]
-    line_set = open3d.geometry.LineSet()
-    line_set.points = open3d.utility.Vector3dVector(points)
-    line_set.lines = open3d.utility.Vector2iVector(lines)
-    line_set.colors = open3d.utility.Vector3dVector(colors)
-    return line_set
-
-
 def mesh_to_trimesh(mesh):
     open3d.io.write_triangle_mesh("temp.ply", mesh)
     tri_mesh = trimesh.load_mesh("temp.ply")
@@ -157,20 +195,12 @@ def trimesh_to_mesh(tri_mesh):
     return mesh
 
 
-def draw_mesh(mesh):
-    open3d.visualization.draw_geometries([mesh])
-
-
 def refine_outliers(mesh, face_average, lb, ub, is_small, dataset):
     """
     Refines the outliers,
     by dividing the triangles or merging them using trimesh.
     """
-
-    # draw_mesh(mesh)
-
     if is_small:
-        rnd = 0
         while len(mesh.triangles) < lb:
             mesh = mesh.subdivide_midpoint()
 
@@ -178,9 +208,6 @@ def refine_outliers(mesh, face_average, lb, ub, is_small, dataset):
             mesh = mesh.simplify_quadric_decimation(face_average)
     else:
         mesh = mesh.simplify_quadric_decimation(face_average)
-
-        # print('After decimation', len(mesh.vertices))
-        # print('After decimation', len(mesh.triangles))
 
     # Some post-processing.
     # Removing faces which do not have 3 unique vertex indices.
@@ -190,7 +217,5 @@ def refine_outliers(mesh, face_average, lb, ub, is_small, dataset):
     mesh = mesh.remove_duplicated_triangles()
     mesh = mesh.remove_duplicated_vertices()
     mesh = mesh.remove_unreferenced_vertices()
-
-    # draw_mesh(mesh)
 
     return mesh
