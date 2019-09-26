@@ -1,9 +1,9 @@
 import open3d
 
-from multimedia_retrieval.filter.filter import filter_meshes
-from multimedia_retrieval.normalization.normalization import normalization
-from multimedia_retrieval.visualization.visualization import draw_meshes
-from multimedia_retrieval.datasets.datasets import read_dataset
+from .filter.filter import filter_meshes
+from .normalization.normalization import normalization
+from .visualization.visualization import draw_meshes
+from .datasets.datasets import read_dataset
 
 
 def run():

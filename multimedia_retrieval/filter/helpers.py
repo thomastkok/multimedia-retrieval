@@ -5,9 +5,6 @@ import trimesh
 import statistics
 import csv
 
-from ..datasets.datasets import read_mesh
-from multimedia_retrieval.normalization.normalization import normalization
-
 
 def get_classes(file_path, dataset):
     """

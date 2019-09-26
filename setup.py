@@ -9,5 +9,5 @@ setup(
   long_description=readme,
   author='Ruben Schenkhuizen, Thomas Kok',
   author_email='r.schenkhuizen@students.uu.nl, t.t.kok@students.uu.nl',
-  packages=find_packages()
+  packages=find_packages(exclude=['data', 'docs'])
 )
