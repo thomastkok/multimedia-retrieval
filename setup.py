@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 with open('README.md') as f:
-  readme = f.read()
+    readme = f.read()
 
 setup(
   name='multimedia-retrieval',
