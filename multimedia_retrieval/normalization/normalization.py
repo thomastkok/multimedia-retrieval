@@ -6,5 +6,5 @@ from .helpers import (
 def normalization(meshes):
     for mesh in meshes:
         translate_to_origin(mesh)
-        mesh = align_to_eigenvectors(mesh)
+        align_to_eigenvectors(mesh)
         scale_to_unit(mesh)

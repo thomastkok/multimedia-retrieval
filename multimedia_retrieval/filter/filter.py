@@ -1,9 +1,10 @@
 from .helpers import (
     output_filter, refine_outliers, get_classes,
-    get_mesh_properties, get_stat_property_names, get_stats,
-    mesh_to_trimesh, trimesh_to_mesh
+    get_mesh_properties, get_stat_property_names, get_stats
 )
 from multimedia_retrieval.datasets.datasets import read_dataset
+from multimedia_retrieval.mesh_conversion.helpers import (mesh_to_trimesh,
+                                                          trimesh_to_mesh)
 
 
 def filter_meshes(dataset, file_path=None, n_meshes=None,

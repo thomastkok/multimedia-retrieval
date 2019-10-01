@@ -29,6 +29,7 @@ def scale_to_unit(mesh):
 def align_to_eigenvectors(mesh):
     vertices = np.asarray(mesh.vertices)
     eigenvectors = np.linalg.eigh(np.cov(vertices, rowvar=False))[1]
-    return np.stack([vertices @ eigenvectors[0],
-                     vertices @ eigenvectors[1],
-                     vertices @ eigenvectors[2]], axis=1)
+    mesh.vertices = open3d.utility.Vector3dVector(
+                      np.stack([vertices @ eigenvectors[0],
+                                vertices @ eigenvectors[1],
+                                vertices @ eigenvectors[2]], axis=1))
