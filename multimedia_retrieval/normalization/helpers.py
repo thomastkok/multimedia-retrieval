@@ -33,3 +33,30 @@ def align_to_eigenvectors(mesh):
                       np.stack([vertices @ eigenvectors[0],
                                 vertices @ eigenvectors[1],
                                 vertices @ eigenvectors[2]], axis=1))
+
+
+def flip_mesh(mesh):
+    mass = [
+        [0, 0],  # x [<0, >0]
+        [0, 0],  # y
+        [0, 0]   # z
+    ]
+    for triangle in mesh.triangles:
+        center = [0, 0, 0]
+        for v in triangle:
+            vertex = mesh.vertices[v]
+            center += vertex
+        center = center / 3
+        for i, c in enumerate(center):
+            if c < 0:
+                mass[i][0] += c * c
+            elif c > 0:
+                mass[i][1] += c * c
+    flip = [1, 1, 1]
+    for i, c in enumerate(mass):
+        if c[1] > c[0]:
+            flip[i] = -1
+    for v in mesh.vertices:
+        print(v)
+        v = v * flip
+        print(v)
