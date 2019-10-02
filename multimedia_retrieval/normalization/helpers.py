@@ -36,11 +36,7 @@ def align_to_eigenvectors(mesh):
 
 
 def flip_mesh(mesh):
-    mass = [
-        [0, 0],  # x [<0, >0]
-        [0, 0],  # y
-        [0, 0]   # z
-    ]
+    mass = [0, 0, 0]  # x, y, z
     for triangle in mesh.triangles:
         center = [0, 0, 0]
         for v in triangle:
@@ -48,15 +44,10 @@ def flip_mesh(mesh):
             center += vertex
         center = center / 3
         for i, c in enumerate(center):
-            if c < 0:
-                mass[i][0] += c * c
-            elif c > 0:
-                mass[i][1] += c * c
+            mass[i] += (int)(c > 0) * (c * c)
     flip = [1, 1, 1]
     for i, c in enumerate(mass):
-        if c[1] > c[0]:
+        if c > 0:
             flip[i] = -1
     for v in mesh.vertices:
-        print(v)
         v = v * flip
-        print(v)
