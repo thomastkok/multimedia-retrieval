@@ -81,6 +81,13 @@ def get_stat_property_names():
     return ['nr_faces', 'nr_vertices',
             'bounding_box_vol', 'centroid']
 
+def get_mesh_property_array(mesh_props, feature_name):
+    features = []
+    for mesh_key in mesh_props.keys():
+        mesh = mesh_props[mesh_key]
+        features.append(mesh[feature_name])
+    
+    return features
 
 def get_mesh_properties(meshes, classes):
     """
