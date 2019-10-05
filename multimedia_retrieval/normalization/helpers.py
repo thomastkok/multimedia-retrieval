@@ -22,7 +22,7 @@ def scale_to_unit(mesh):
         raise ValueError(
             f'Mesh must be centered around the origin, not {center}'
         )
-    factor = 0.5 / max(max(-mesh.get_min_bound()), max(mesh.get_max_bound()))
+    factor = 1 / max(mesh.get_max_bound() - mesh.get_min_bound())
     mesh.scale(factor, center=True)
 
 
