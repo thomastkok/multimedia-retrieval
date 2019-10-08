@@ -1,5 +1,5 @@
 from .helpers import (
-    output_filter, refine_outliers, get_classes,
+    output_filter, refine_outlier, get_classes,
     get_mesh_properties, get_stat_property_names, get_stats
 )
 from multimedia_retrieval.datasets.datasets import read_dataset
@@ -38,11 +38,11 @@ def fix_outliers(meshes, face_average, offset=1.3):
         mesh = meshes[mesh_key]
         if (len(mesh.triangles) < lower_bound or
            len(mesh.vertices) < lower_bound):
-            mesh = refine_outliers(
+            mesh = refine_outlier(
                 mesh, face_average, lower_bound, upper_bound, True)
         elif (len(mesh.triangles) > upper_bound or
               len(mesh.triangles) > upper_bound):
-            mesh = refine_outliers(
+            mesh = refine_outlier(
                 mesh, face_average, lower_bound, upper_bound, False)
         meshes[mesh_key] = mesh
 

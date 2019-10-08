@@ -3,7 +3,7 @@ from .helpers import unit_cube
 
 
 def draw_mesh(mesh, draw_unit_cube=False):
-    draw_meshes([mesh], unit_cube)
+    draw_meshes([mesh], draw_unit_cube)
 
 
 def draw_meshes(meshes, draw_unit_cube=False):
