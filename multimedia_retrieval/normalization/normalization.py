@@ -1,7 +1,7 @@
 from .mesh_norm import (
     translate_to_origin, scale_to_unit, align_to_eigenvectors, flip_mesh
 )
-from .feat_norm import rescale
+from .feat_norm import rescale, standardize
 
 
 def mesh_normalization(meshes):
@@ -14,4 +14,4 @@ def mesh_normalization(meshes):
 
 def feature_normalization(features):
     for feature in features:
-        rescale(feature)
+        standardize(feature)
