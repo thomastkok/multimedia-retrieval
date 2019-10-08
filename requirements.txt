@@ -16,6 +16,7 @@ jupyter-client==5.3.1
 jupyter-core==4.5.0
 MarkupSafe==1.1.1
 mistune==0.8.4
+-e git+git@github.com:thomastkok/multimedia-retrieval.git@e0e0929be9bda6146886a68d5338eb085f1c5ebe#egg=multimedia_retrieval
 nbconvert==5.6.0
 nbformat==4.4.0
 notebook==6.0.1
@@ -32,6 +33,7 @@ pyrsistent==0.15.4
 python-dateutil==2.8.0
 pywinpty==0.5.5
 pyzmq==18.1.0
+scipy==1.3.1
 Send2Trash==1.5.0
 six==1.12.0
 terminado==0.8.2
