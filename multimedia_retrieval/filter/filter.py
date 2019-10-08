@@ -1,5 +1,5 @@
 from .helpers import (
-    output_filter, refine_outlier, get_classes,
+    output_filter, refine_outliers, get_classes,
     get_mesh_properties, get_stat_property_names, get_stats
 )
 from multimedia_retrieval.datasets.datasets import read_dataset
