@@ -1,7 +1,11 @@
 from .helpers import (
     output_filter, refine_outliers, get_classes,
+<<<<<<< HEAD
     get_mesh_properties, get_stat_property_names, get_stats,
     get_mesh_property_array
+=======
+    get_mesh_properties, get_stat_property_names, get_stats
+>>>>>>> master
 )
 from multimedia_retrieval.datasets.datasets import read_dataset
 from multimedia_retrieval.mesh_conversion.helpers import (mesh_to_trimesh,
