@@ -1,7 +1,7 @@
 from .mesh_norm import (
     translate_to_origin, scale_to_unit, align_to_eigenvectors, flip_mesh
 )
-from .feat_norm import rescale, standardize
+from .feat_norm import rescale, standardize, normalize_histogram
 
 
 def mesh_normalization(meshes):
@@ -14,4 +14,7 @@ def mesh_normalization(meshes):
 
 def feature_normalization(features):
     for feature in features:
-        standardize(feature)
+        if isinstance(feature[0], list):
+            normalize_histogram(feature)
+        else:
+            standardize(feature)
