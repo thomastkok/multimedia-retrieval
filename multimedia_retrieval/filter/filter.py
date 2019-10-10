@@ -1,12 +1,12 @@
 from .helpers import (
-    output_filter, refine_outliers, get_classes,
+    output_filter, refine_outlier, get_classes,
     get_mesh_properties, get_stat_property_names, get_stats,
     get_mesh_property_array
 )
 from multimedia_retrieval.datasets.datasets import read_dataset
 from multimedia_retrieval.mesh_conversion.helpers import (mesh_to_trimesh,
                                                           trimesh_to_mesh)
-from multimedia_retrieval.plots.plots import plot_histogram
+from multimedia_retrieval.histograms.histograms import plot_histogram
 
 
 def filter_meshes(dataset, file_path=None, n_meshes=None,
@@ -38,7 +38,7 @@ def plot_filter_feature(mesh_props, mesh_stats, feature_name):
     max_feature = mesh_stats['max'][feature_name]
 
     feature_meshes = get_mesh_property_array(mesh_props, feature_name)
-    plot_histogram(feature_meshes, min_feature, max_feature, 5)
+    plot_histogram(feature_meshes, 5, min_feature, max_feature)
 
 
 def fix_outliers(meshes, face_average, offset=1.3):
