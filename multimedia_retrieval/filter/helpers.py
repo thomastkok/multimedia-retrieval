@@ -107,7 +107,7 @@ def get_mesh_properties(meshes, classes):
 
 
 def get_stats(mesh_props):
-    # Get min, max and avg
+    """Get min, max and avg."""
     mesh_stats = {}
     mins = {}
     maxs = {}

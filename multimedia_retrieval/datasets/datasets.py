@@ -3,10 +3,17 @@ import trimesh
 import os
 
 
-def read_mesh(file_path, dataset):
+def read_mesh(file_path):
     """
     Reads the mesh file located at the specified file path,
     and returns the mesh as open3d object.
+
+    Args:
+        file_path (str): The file path of the mesh, to be read.
+
+    Returns:
+        TriangleMesh: The mesh as an open3d object.
+
     """
     off = False
     original_file_path = file_path
@@ -29,6 +36,16 @@ def read_dataset(dataset, file_path=None, n_meshes=None):
     Reads either the princeton or labeled dataset,
     located at the specified file path,
     and returns a dictionary of n meshes.
+
+    Args:
+        dataset (str): The name of the dataset to be read, must
+            be either 'princeton' or 'labeled'.
+        file_path (str): The location of the dataset.
+        n_meshes (int): The number of meshes to be read.
+
+    Returns:
+        dict{int: TriangleMesh}: Returns a dictionary of all meshes.
+
     """
     meshes = {}
     n_meshes_loaded = 0
@@ -46,7 +63,7 @@ def read_dataset(dataset, file_path=None, n_meshes=None):
         if files:
             for file in files:
                 if file.endswith('.off'):
-                    mesh = read_mesh(root + '/' + file, dataset)
+                    mesh = read_mesh(root + '/' + file)
                     index = file.split('.', 1)[0].replace('m', '')
                     meshes[index] = mesh
                     if n_meshes:

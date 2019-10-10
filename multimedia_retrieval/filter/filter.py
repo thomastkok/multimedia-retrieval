@@ -12,6 +12,18 @@ def filter_meshes(dataset, file_path=None, n_meshes=None,
     """
     Checks all (or n) shapes in the given dataset,
     and outputs a set of properties for each shape.
+
+    Args:
+        dataset (str): The name of the dataset to be read, must
+            be either 'princeton' or 'labeled'.
+        file_path (str): file_path (str): The file path of the dataset,
+            to be read.
+        n_meshes (int): The number of meshes to be read. If None, read all.
+        meshes (dict{int: TriangleMesh}): The meshes to be filtered,
+            if already read.
+        output_file (str): The path of the file to write the output to,
+            if not writing to console.
+
     """
     if dataset == 'princeton':
         if not file_path:
