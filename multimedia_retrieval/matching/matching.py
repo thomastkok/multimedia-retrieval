@@ -1,4 +1,19 @@
 from .distances import euclidean
+from multimedia_retrieval.datasets.datasets import read_mesh, read_dataset
+
+
+def query_shape(mesh_path, dataset_name):
+    mesh = read_mesh(mesh_path)
+    dataset = read_dataset(dataset_name.lower(), n_meshes=10)
+
+    # TODO: Replace fake feature values with real feature values
+    mesh_feat = [1]
+    ds_feat = {}
+    for data_point in dataset.keys():
+        ds_feat[data_point] = [int(data_point) / 12]
+
+    shapes = match_shapes(mesh, dataset, mesh_feat, ds_feat, k=3)
+    return [dataset[key] for key in shapes]
 
 
 def match_shapes(mesh, dataset, mesh_feat, ds_feat, k=None):

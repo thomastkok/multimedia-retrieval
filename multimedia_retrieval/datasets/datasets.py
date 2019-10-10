@@ -3,7 +3,7 @@ import trimesh
 import os
 
 
-def read_mesh(file_path, dataset):
+def read_mesh(file_path):
     """
     Reads the mesh file located at the specified file path,
     and returns the mesh as open3d object.
@@ -46,7 +46,7 @@ def read_dataset(dataset, file_path=None, n_meshes=None):
         if files:
             for file in files:
                 if file.endswith('.off'):
-                    mesh = read_mesh(root + '/' + file, dataset)
+                    mesh = read_mesh(root + '/' + file)
                     index = file.split('.', 1)[0].replace('m', '')
                     meshes[index] = mesh
                     if n_meshes:
