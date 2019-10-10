@@ -6,7 +6,7 @@ from .helpers import (
 from multimedia_retrieval.datasets.datasets import read_dataset
 from multimedia_retrieval.mesh_conversion.helpers import (mesh_to_trimesh,
                                                           trimesh_to_mesh)
-from multimedia_retrieval.plots.plots import plot_histogram
+from multimedia_retrieval.histograms.histograms import plot_histogram
 
 
 def filter_meshes(dataset, file_path=None, n_meshes=None,
@@ -44,6 +44,7 @@ def filter_meshes(dataset, file_path=None, n_meshes=None,
 
     plot_filter_feature(mesh_properties, mesh_stats, 'nr_faces')
     output_filter(output_file, mesh_properties, mesh_stats)
+
 
 def plot_filter_feature(mesh_props, mesh_stats, feature_name):
     min_feature = mesh_stats['min'][feature_name]
