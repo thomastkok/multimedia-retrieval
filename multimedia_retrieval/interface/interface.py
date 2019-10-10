@@ -24,6 +24,5 @@ def create_interface():
             shapes = query_shape(mesh, dataset)
             for shape in shapes:
                 draw_mesh(shape)
-        print('You entered', values)
 
     window.close()

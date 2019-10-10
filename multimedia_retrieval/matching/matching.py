@@ -1,10 +1,14 @@
 from .distances import euclidean
 from multimedia_retrieval.datasets.datasets import read_mesh, read_dataset
+from multimedia_retrieval.normalization.normalization import \
+    mesh_normalization, feature_normalization
 
 
 def query_shape(mesh_path, dataset_name):
     mesh = read_mesh(mesh_path)
     dataset = read_dataset(dataset_name.lower(), n_meshes=10)
+    mesh_normalization([mesh])
+    mesh_normalization(dataset.values())
 
     # TODO: Replace fake feature values with real feature values
     mesh_feat = [1]
