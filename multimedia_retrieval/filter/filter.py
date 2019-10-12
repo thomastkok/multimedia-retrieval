@@ -1,5 +1,5 @@
 from .helpers import (
-    output_filter, refine_outliers, get_classes,
+    output_filter, refine_outlier, get_classes,
     get_mesh_properties, get_stat_property_names, get_stats,
     get_mesh_property_array
 )
@@ -51,7 +51,7 @@ def plot_filter_feature(mesh_props, mesh_stats, feature_name):
     max_feature = mesh_stats['max'][feature_name]
 
     feature_meshes = get_mesh_property_array(mesh_props, feature_name)
-    plot_histogram(feature_meshes, min_feature, max_feature, 5)
+    plot_histogram(feature_meshes, 5, min_feature, max_feature)
 
 
 def fix_outliers(meshes, face_average, offset=1.3):
@@ -61,11 +61,11 @@ def fix_outliers(meshes, face_average, offset=1.3):
         mesh = meshes[mesh_key]
         if (len(mesh.triangles) < lower_bound or
            len(mesh.vertices) < lower_bound):
-            mesh = refine_outliers(
+            mesh = refine_outlier(
                 mesh, face_average, lower_bound, upper_bound, True)
         elif (len(mesh.triangles) > upper_bound or
               len(mesh.triangles) > upper_bound):
-            mesh = refine_outliers(
+            mesh = refine_outlier(
                 mesh, face_average, lower_bound, upper_bound, False)
         meshes[mesh_key] = mesh
 

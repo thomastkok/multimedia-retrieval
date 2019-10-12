@@ -16,7 +16,6 @@ def read_mesh(file_path):
 
     """
     off = False
-    original_file_path = file_path
     if file_path.endswith('.off'):
         mesh = trimesh.load_mesh(file_path)
         trimesh.exchange.export.export_mesh(mesh, './temp.ply', 'ply')

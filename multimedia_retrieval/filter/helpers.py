@@ -1,5 +1,6 @@
 import numpy as np
 import sys
+import os
 import open3d
 import trimesh
 import statistics
@@ -142,7 +143,7 @@ def get_stats(mesh_props):
     return mesh_stats
 
 
-def refine_outliers(mesh, face_average, lb, ub, is_small):
+def refine_outlier(mesh, face_average, lb, ub, is_small):
     """
     Refines the outliers,
     by dividing the triangles or merging them using trimesh.
@@ -164,5 +165,8 @@ def refine_outliers(mesh, face_average, lb, ub, is_small):
     mesh = mesh.remove_duplicated_triangles()
     mesh = mesh.remove_duplicated_vertices()
     mesh = mesh.remove_unreferenced_vertices()
+
+    print(len(mesh.triangles))
+    print(len(mesh.vertices))
 
     return mesh
