@@ -1,7 +1,9 @@
+import random
+from math import pi
+
 import numpy as np
 import open3d
 import trimesh
-import random
 
 
 def sample_points(mesh, sample_size, num_indices, func, **kwargs):
