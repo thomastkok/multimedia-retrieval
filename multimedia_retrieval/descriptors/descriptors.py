@@ -15,8 +15,7 @@ from .helpers import (compute_angles, compute_compactness,
 from multimedia_retrieval.mesh_conversion.helpers import (trimesh_to_mesh,
                                                           mesh_to_trimesh)
 
-from multimedia_retrieval.histograms.histograms import (get_histogram,
-                                                        plot_histogram)
+from multimedia_retrieval.histograms.histograms import plot_histogram
 
 
 def compute_global_descriptors(mesh):
@@ -49,10 +48,10 @@ def compute_local_descriptors(mesh, sample_size, nr_bins):
     d_4 = compute_tetrahedron_volumes(mesh, sample_size)
 
     local_features = {}
-    local_features['A3'] = get_histogram(a_3, nr_bins)
-    local_features['D1'] = get_histogram(d_1, nr_bins)
-    local_features['D2'] = get_histogram(d_2, nr_bins)
-    local_features['D3'] = get_histogram(d_3, nr_bins)
-    local_features['D4'] = get_histogram(d_4, nr_bins)
+    local_features['A3'] = np.histogram(a_3, nr_bins)
+    local_features['D1'] = np.histogram(d_1, nr_bins)
+    local_features['D2'] = np.histogram(d_2, nr_bins)
+    local_features['D3'] = np.histogram(d_3, nr_bins)
+    local_features['D4'] = np.histogram(d_4, nr_bins)
 
     return local_features
