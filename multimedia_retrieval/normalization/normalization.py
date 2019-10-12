@@ -5,6 +5,7 @@ from .feat_norm import rescale, standardize, normalize_histogram
 
 
 def mesh_normalization(meshes):
+    """Normalizes all given meshes."""
     for mesh in meshes:
         translate_to_origin(mesh)
         align_to_eigenvectors(mesh)
@@ -13,6 +14,7 @@ def mesh_normalization(meshes):
 
 
 def feature_normalization(features):
+    """Normalizes all given features."""
     for feature in features:
         if isinstance(feature[0], list):
             normalize_histogram(feature)

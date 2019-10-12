@@ -27,6 +27,10 @@ def scale_to_unit(mesh):
 
 
 def align_to_eigenvectors(mesh):
+    """
+    Aligns the mesh,
+    such that its eigenvectors are the same direction as the axes.
+    """
     vertices = np.asarray(mesh.vertices)
     eigenvectors = np.linalg.eigh(np.cov(vertices, rowvar=False))[1]
     mesh.vertices = open3d.utility.Vector3dVector(
@@ -36,7 +40,11 @@ def align_to_eigenvectors(mesh):
 
 
 def flip_mesh(mesh):
-    mass = [0, 0, 0]  # x, y, z
+    """
+    Flips the mesh,
+    such that the 'heaviest' side is always on the negative side of each axis.
+    """
+    mass = [0, 0, 0]
     for triangle in mesh.triangles:
         center = [0, 0, 0]
         for v in triangle:
