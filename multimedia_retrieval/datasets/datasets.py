@@ -1,6 +1,7 @@
+import os
+
 import open3d
 import trimesh
-import os
 
 
 def read_mesh(file_path):

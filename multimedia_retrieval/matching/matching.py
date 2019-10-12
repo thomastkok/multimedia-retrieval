@@ -1,7 +1,8 @@
+from multimedia_retrieval.datasets.datasets import read_dataset, read_mesh
+from multimedia_retrieval.normalization.normalization import (
+    feature_normalization, mesh_normalization)
+
 from .distances import euclidean
-from multimedia_retrieval.datasets.datasets import read_mesh, read_dataset
-from multimedia_retrieval.normalization.normalization import \
-    mesh_normalization, feature_normalization
 
 
 def query_shape(mesh_path, dataset_name):

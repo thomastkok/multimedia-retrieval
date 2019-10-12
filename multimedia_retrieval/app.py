@@ -1,11 +1,11 @@
 import open3d
 
-from .filter.filter import filter_meshes
-from .normalization.normalization import (mesh_normalization,
-                                          feature_normalization)
-from .visualization.visualization import draw_meshes, draw_mesh
 from .datasets.datasets import read_dataset
+from .filter.filter import filter_meshes
 from .interface.interface import create_interface
+from .normalization.normalization import (feature_normalization,
+                                          mesh_normalization)
+from .visualization.visualization import draw_mesh, draw_meshes
 
 
 def run():

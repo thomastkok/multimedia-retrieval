@@ -1,4 +1,5 @@
 import PySimpleGUI as gui
+
 from multimedia_retrieval.matching.matching import query_shape
 from multimedia_retrieval.visualization.visualization import draw_mesh
 
