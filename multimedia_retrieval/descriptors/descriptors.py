@@ -15,11 +15,15 @@ from .helpers import (compute_angles, compute_compactness,
 from multimedia_retrieval.mesh_conversion.helpers import (trimesh_to_mesh,
                                                           mesh_to_trimesh)
 
-from multimedia_retrieval.histograms.histograms import (get_histogram, 
+from multimedia_retrieval.histograms.histograms import (get_histogram,
                                                         plot_histogram)
 
-def compute_global_descriptors(mesh):
 
+def compute_global_descriptors(mesh):
+    """
+    Computes the global descriptors as described by the assignment.
+    Returns a dictionary containing the global descriptors.
+    """
     tri_mesh = mesh_to_trimesh(mesh)
 
     global_features = {}
@@ -33,19 +37,22 @@ def compute_global_descriptors(mesh):
 
 
 def compute_local_descriptors(mesh, sample_size, nr_bins):
+    """
+    Computes the local descriptors as described by the assignment.
+    Returns a dictionary containing the local descriptors.
+    """
+
     a_3 = compute_angles(mesh, sample_size)
     d_1 = compute_dists(mesh, sample_size)
     d_2 = compute_dists(mesh, sample_size, False)
     d_3 = compute_triangle_areas(mesh, sample_size)
     d_4 = compute_tetrahedron_volumes(mesh, sample_size)
-        
+
     local_features = {}
     local_features['A3'] = get_histogram(a_3, nr_bins)
     local_features['D1'] = get_histogram(d_1, nr_bins)
     local_features['D2'] = get_histogram(d_2, nr_bins)
     local_features['D3'] = get_histogram(d_3, nr_bins)
     local_features['D4'] = get_histogram(d_4, nr_bins)
-    
+
     return local_features
-
-
