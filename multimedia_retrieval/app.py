@@ -12,18 +12,21 @@ from .visualization.visualization import draw_mesh, draw_meshes
 
 
 def run():
-    dataset = 'labeled'
-    meshes = read_dataset(dataset=dataset, n_meshes=10)
-    mesh_normalization(meshes.values())
+    features, paths = initialize()
 
-    ds_feat = {}
-    for mesh in meshes.keys():
-        ds_feat[mesh] = \
-            compute_global_descriptors(meshes[mesh])
-    features = pd.DataFrame(ds_feat)
-    print(features)
+    create_interface(features, paths)
 
-    for name, series in features.iterrows():
-        feature_normalization(series)
-    print(features)
-    create_interface(meshes, features)
+
+def initialize():
+    f = {}
+    p = {}
+    for dataset in ('princeton', 'labeled'):
+        features, paths = read_dataset(dataset=dataset,
+                                       n_meshes=10, features=True)
+
+        for name, series in features.iterrows():
+            feature_normalization(series)
+
+        f[dataset] = features
+        p[dataset] = paths
+    return pd.Series(f), pd.Series(p)

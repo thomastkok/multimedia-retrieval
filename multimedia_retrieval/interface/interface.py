@@ -2,9 +2,10 @@ import PySimpleGUI as gui
 
 from multimedia_retrieval.matching.matching import query_shape
 from multimedia_retrieval.visualization.visualization import draw_mesh
+from multimedia_retrieval.datasets.datasets import read_mesh
 
 
-def create_interface(dataset, features):
+def create_interface(features, paths):
     layout = [
         [gui.Text('Welcome to the 3D Shape Retrieval Program!')],
         [gui.Text('Select your dataset'),
@@ -20,10 +21,11 @@ def create_interface(dataset, features):
         if event in (None, 'Cancel'):
             break
         elif event in ('Ok'):
-            # dataset = values[0]
+            dataset = values[0].lower()
             mesh = values[1]
-            shapes = query_shape(mesh, dataset, features)
-            for shape in shapes:
-                draw_mesh(shape)
+            shapes = query_shape(mesh, features[dataset])
+            for shape, dist in shapes.iteritems():
+                print(f'The shape {shape} has distance {dist}.')
+                draw_mesh(read_mesh(paths[dataset][shape]))
 
     window.close()
