@@ -10,7 +10,8 @@ import csv
 
 def plot_histogram(title, nr_bins, **kwargs):
     """
-    Plots a histogram given a specified bin size.
+    Plots one or more histograms (as subplots) given a specified bin size.
+    The histograms share the y-axis (the counts).
     """
 
     config = dict(alpha=0.5, bins=nr_bins)
@@ -19,9 +20,10 @@ def plot_histogram(title, nr_bins, **kwargs):
 
     i = 0
     for kw in kwargs.keys():
-        axs[0, i].hist(kwargs[kw], alpha=0.5, facecolor='green', edgecolor='k', bins=nr_bins)
+        axs[0, i].hist(kwargs[kw], alpha=0.5, facecolor='green', edgecolor='k',
+                                                        bins=nr_bins)
         axs[0, i].set_title(kw)
-        i+=1
+        i += 1
     plt.suptitle(title)
     plt.subplots_adjust(hspace=0.5)
     plt.show()
