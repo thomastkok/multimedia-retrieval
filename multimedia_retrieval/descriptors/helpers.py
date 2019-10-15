@@ -9,7 +9,7 @@ import trimesh
 def sample_points(mesh, sample_size, num_indices, func, **kwargs):
     """
     Samples n times random vertex points.
-    It then applis a local descriptor function to these points.
+    It then applies a local descriptor function to these points.
     Returns the result of the applied function (of a local/global descriptor).
     """
 

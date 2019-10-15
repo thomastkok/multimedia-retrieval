@@ -4,7 +4,7 @@ from multimedia_retrieval.matching.matching import query_shape
 from multimedia_retrieval.visualization.visualization import draw_mesh
 
 
-def create_interface():
+def create_interface(dataset, features):
     layout = [
         [gui.Text('Welcome to the 3D Shape Retrieval Program!')],
         [gui.Text('Select your dataset'),
@@ -20,9 +20,9 @@ def create_interface():
         if event in (None, 'Cancel'):
             break
         elif event in ('Ok'):
-            dataset = values[0]
+            # dataset = values[0]
             mesh = values[1]
-            shapes = query_shape(mesh, dataset)
+            shapes = query_shape(mesh, dataset, features)
             for shape in shapes:
                 draw_mesh(shape)
 

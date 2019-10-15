@@ -1,4 +1,5 @@
 import open3d
+import pandas as pd
 
 from .datasets.datasets import read_dataset, read_mesh
 from .descriptors.descriptors import (compute_global_descriptors,
@@ -11,15 +12,18 @@ from .visualization.visualization import draw_mesh, draw_meshes
 
 
 def run():
-    create_interface()
-    # dataset = input('Please specify the dataset (princeton/labeled): ')
-    # if not dataset:
-    #     dataset = 'labeled'
-    # meshes = read_dataset(dataset=dataset, n_meshes=10)
-    # mesh_normalization(meshes.values())
-    # filter_meshes(dataset)
-    # for mesh in meshes.values():
-    #     compute_local_descriptors(mesh, len(mesh.vertices), 10)
-    #     compute_global_descriptors(mesh)
-    #     draw_mesh(mesh, draw_unit_cube=True)
-    # draw_meshes(list(meshes.values()), draw_unit_cube=True)
+    dataset = 'labeled'
+    meshes = read_dataset(dataset=dataset, n_meshes=10)
+    mesh_normalization(meshes.values())
+
+    ds_feat = {}
+    for mesh in meshes.keys():
+        ds_feat[mesh] = \
+            compute_global_descriptors(meshes[mesh])
+    features = pd.DataFrame(ds_feat)
+    print(features)
+
+    for name, series in features.iterrows():
+        feature_normalization(series)
+    print(features)
+    create_interface(meshes, features)

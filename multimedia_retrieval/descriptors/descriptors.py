@@ -1,21 +1,19 @@
-import open3d
-import trimesh
 import sys
 from math import pi
+
 import numpy as np
-
-
-from .helpers import (compute_angles, compute_compactness,
-                      compute_diameter, compute_eccentricity,
-                      compute_dists, get_eigen,
-                      compute_triangle_areas,
-                      compute_tetrahedron_volumes)
-
-
-from multimedia_retrieval.mesh_conversion.helpers import (trimesh_to_mesh,
-                                                          mesh_to_trimesh)
+import open3d
+import pandas as pd
+import trimesh
 
 from multimedia_retrieval.histograms.histograms import plot_histogram
+from multimedia_retrieval.mesh_conversion.helpers import (mesh_to_trimesh,
+                                                          trimesh_to_mesh)
+
+from .helpers import (compute_angles, compute_compactness, compute_diameter,
+                      compute_dists, compute_eccentricity,
+                      compute_tetrahedron_volumes, compute_triangle_areas,
+                      get_eigen)
 
 
 def compute_global_descriptors(mesh):
@@ -32,7 +30,7 @@ def compute_global_descriptors(mesh):
     global_features['diameter'] = compute_diameter(mesh)
     global_features['eccentricity'] = compute_eccentricity(mesh)
 
-    return global_features
+    return pd.Series(global_features)
 
 
 def compute_local_descriptors(mesh, sample_size, nr_bins):
@@ -54,4 +52,4 @@ def compute_local_descriptors(mesh, sample_size, nr_bins):
     local_features['D3'] = np.histogram(d_3, nr_bins)
     local_features['D4'] = np.histogram(d_4, nr_bins)
 
-    return local_features
+    return pd.Series(local_features)
