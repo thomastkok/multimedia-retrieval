@@ -32,9 +32,7 @@ def run():
     draw_mesh(glasses)
 
     # bust_global = compute_global_descriptors(bust)
-    # bust_local = compute_local_descriptors(bust, len(bust.vertices), 10)
-
-
+    bust_local = compute_local_descriptors(bust, len(bust.vertices), 10)
 
     # glasses_global = compute_global_descriptors(glasses)
     # glasses_local = compute_local_descriptors(glasses, len(glasses.vertices), 10)
