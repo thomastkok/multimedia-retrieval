@@ -52,6 +52,9 @@ def read_dataset(dataset, file_path=None, n_meshes=None, features=False):
         dict{int: TriangleMesh}: Returns a dictionary of all meshes.
 
     """
+    total = {'princeton': 1814, 'labeled': 360}
+    step = total[dataset] // n_meshes
+    since_last_step = -1
     meshes = {}
     paths = {}
     n_meshes_loaded = 0
@@ -69,6 +72,12 @@ def read_dataset(dataset, file_path=None, n_meshes=None, features=False):
         if files:
             for file in files:
                 if file.endswith('.off'):
+                    if n_meshes:
+                        since_last_step += 1
+                        if since_last_step == step:
+                            since_last_step = 0
+                        if since_last_step > 0:
+                            continue
                     mesh = read_mesh(root + '/' + file)
                     index = file.split('.', 1)[0].replace('m', '')
                     if features:
