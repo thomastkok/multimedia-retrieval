@@ -1,7 +1,6 @@
 import open3d
 import trimesh
 import sys
-from math import pi
 import numpy as np
 
 
@@ -9,7 +8,8 @@ from .helpers import (compute_angles, compute_compactness,
                       compute_diameter, compute_eccentricity,
                       compute_dists, get_eigen,
                       compute_triangle_areas,
-                      compute_tetrahedron_volumes)
+                      compute_tetrahedron_volumes,
+                      get_hist_ranges)
 
 
 from multimedia_retrieval.mesh_conversion.helpers import (trimesh_to_mesh,
@@ -41,6 +41,8 @@ def compute_local_descriptors(mesh, sample_size, nr_bins):
     Returns a dictionary containing the local descriptors.
     """
 
+    hist_ranges = get_hist_ranges()
+
     a_3 = compute_angles(mesh, sample_size)
     d_1 = compute_dists(mesh, sample_size)
     d_2 = compute_dists(mesh, sample_size, False)
@@ -48,10 +50,15 @@ def compute_local_descriptors(mesh, sample_size, nr_bins):
     d_4 = compute_tetrahedron_volumes(mesh, sample_size)
 
     local_features = {}
-    local_features['A3'] = np.histogram(a_3, nr_bins)
-    local_features['D1'] = np.histogram(d_1, nr_bins)
-    local_features['D2'] = np.histogram(d_2, nr_bins)
-    local_features['D3'] = np.histogram(d_3, nr_bins)
-    local_features['D4'] = np.histogram(d_4, nr_bins)
+    local_features['A3'] = np.histogram(
+        a_3, nr_bins, range=(hist_ranges['A3']))
+    local_features['D1'] = np.histogram(
+        d_1, nr_bins, range=(hist_ranges['D1']))
+    local_features['D2'] = np.histogram(
+        d_2, nr_bins, range=(hist_ranges['D2']))
+    local_features['D3'] = np.histogram(
+        d_3, nr_bins, range=(hist_ranges['D3']))
+    local_features['D4'] = np.histogram(
+        d_4, nr_bins, range=(hist_ranges['D4']))
 
     return local_features
