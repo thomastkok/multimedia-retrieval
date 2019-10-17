@@ -10,28 +10,31 @@ from .distances import euclidean
 
 
 def query_shape(mesh_path, dataset_features, norm_info):
+    """
+    Given the file path to a local mesh, the features of the dataset,
+    and the necessary information needed to normalize the query mesh,
+    returns the closes matching shapes from the dataset.
+    """
     mesh = read_mesh(mesh_path)
     mesh_normalization(mesh)
     mesh_features = compute_global_descriptors(mesh)
-    print(mesh_features)
     mesh_features = normalize_to(mesh_features, norm_info)
-    print(mesh_features)
 
     shapes = match_shapes(mesh_features, dataset_features, k=3)
     return shapes
 
 
 def match_shapes(mesh_features, dataset_features, k=None):
-    # Get features for mesh
-    # Get features for all meshes in dataset (pre-calculated)
-    # For now, both are parameters
-    # Compute distance between query mesh and all meshes in dataset
+    """
+    Given the features for a mesh, a dataset of features, and k,
+    returns the k closest feature sets in the dataset to
+    the original mesh feature set.
+    """
     results = {}
     for data_point in dataset_features:
         dist = euclidean(mesh_features, dataset_features[data_point])
         results[data_point] = dist
-    # Sort distances from low to high
-    # Return the k best matching shapes
+
     shapes = pd.Series(results).sort_values()
     if not k:
         return shapes

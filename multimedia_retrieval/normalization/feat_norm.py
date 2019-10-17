@@ -43,8 +43,10 @@ def normalize_histogram(feature):
 
 
 def rescale_to(value, min, max):
+    """Rescales a single feature value to a certain range."""
     return (value - min) / (max - min)
 
 
 def standardize_to(value, mean, sd):
+    """Standardizes a certain feature value to a certain distribution."""
     return (value - mean) / sd

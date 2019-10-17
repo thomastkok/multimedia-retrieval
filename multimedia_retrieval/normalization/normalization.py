@@ -18,8 +18,6 @@ def mesh_normalization(meshes):
 
 def feature_normalization(features):
     """Normalizes all given features."""
-    # if not isinstance(features, list):
-    #     features = [features]
     for feature in features:
         if isinstance(feature, tuple):
             normalize_histogram(feature)
@@ -29,12 +27,13 @@ def feature_normalization(features):
 
 
 def normalize_to(values, norm_info):
+    """Normalizes a set of feature values to correspond to the dataset."""
     new_values = {}
     for name, value in values.items():
         if isinstance(value, tuple):
             new_values[name] = normalize_histogram([value])
         else:
             new_values[name] = standardize_to(value,
-                                   norm_info[name]['mean'],
-                                   norm_info[name]['sd'])
+                                              norm_info[name]['mean'],
+                                              norm_info[name]['sd'])
     return pd.Series(new_values)

@@ -19,6 +19,11 @@ def run():
 
 
 def initialize():
+    """
+    Reads the shapes, creates a feature dataset,
+    and returns the feature datasets, paths for all shapes,
+    and necessary information to normalize features of other shapes.
+    """
     f = {}
     p = {}
     n = {}

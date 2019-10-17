@@ -6,6 +6,10 @@ from multimedia_retrieval.datasets.datasets import read_mesh
 
 
 def create_interface(features, paths, norm_info):
+    """
+    Creates the default interface for the app,
+    and allows the user to query shapes.
+    """
     sg.ChangeLookAndFeel('NeutralBlue')
 
     layout = [
