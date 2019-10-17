@@ -15,6 +15,7 @@ def get_hist_ranges():
         'D4': (0, 1)
     }
 
+
 def sample_points(mesh, sample_size, num_indices, func, **kwargs):
     """
     Samples n times random vertex points.
