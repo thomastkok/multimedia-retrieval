@@ -1,20 +1,22 @@
-import PySimpleGUI as gui
+import PySimpleGUI as sg
 
 from multimedia_retrieval.matching.matching import query_shape
 from multimedia_retrieval.visualization.visualization import draw_mesh
 from multimedia_retrieval.datasets.datasets import read_mesh
 
 
-def create_interface(features, paths):
+def create_interface(features, paths, norm_info):
+    sg.ChangeLookAndFeel('NeutralBlue')
+
     layout = [
-        [gui.Text('Welcome to the 3D Shape Retrieval Program!')],
-        [gui.Text('Select your dataset'),
-         gui.InputCombo(('Princeton', 'Labeled'), size=(20, 1))],
-        [gui.Text('Select your query shape:'), gui.Input(), gui.FileBrowse()],
-        [gui.Button('Ok'), gui.Button('Cancel')]
+        [sg.Text('Welcome to the 3D Shape Retrieval Program!')],
+        [sg.Text('Select your dataset'),
+         sg.InputCombo(('Princeton', 'Labeled'), size=(20, 1))],
+        [sg.Text('Select your query shape:'), sg.Input(), sg.FileBrowse()],
+        [sg.Button('Ok'), sg.Button('Cancel')]
     ]
 
-    window = gui.Window('3D Shape Retrieval', layout)
+    window = sg.Window('3D Shape Retrieval', layout)
 
     while True:
         event, values = window.read()
@@ -23,9 +25,11 @@ def create_interface(features, paths):
         elif event in ('Ok'):
             dataset = values[0].lower()
             mesh = values[1]
-            shapes = query_shape(mesh, features[dataset])
+            shapes = query_shape(mesh, features[dataset], norm_info[dataset])
             for shape, dist in shapes.iteritems():
-                print(f'The shape {shape} has distance {dist}.')
-                draw_mesh(read_mesh(paths[dataset][shape]))
+                answer = sg.PopupYesNo(f'Shape {shape} has distance {dist}.'
+                                       'Do you want to view the shape?')
+                if answer == 'Yes':
+                    draw_mesh(read_mesh(paths[dataset][shape]))
 
     window.close()

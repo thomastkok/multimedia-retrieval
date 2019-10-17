@@ -40,3 +40,11 @@ def normalize_histogram(feature):
         bins = histogram[0]
         bs = bins.sum()
         bins = [x / bs for x in bins]
+
+
+def rescale_to(value, min, max):
+    return (value - min) / (max - min)
+
+
+def standardize_to(value, mean, sd):
+    return (value - mean) / sd
