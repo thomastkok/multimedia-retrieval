@@ -29,21 +29,29 @@ def run():
     meshes = [bust, glasses]
     mesh_normalization(meshes)
 
-    bust_global = compute_global_descriptors(bust)
-    bust_local = compute_local_descriptors(bust, len(bust.vertices), 10)
+    draw_mesh(glasses)
 
-    glass_global = compute_global_descriptors(glasses)
-    glass_local = compute_local_descriptors(glasses, len(glasses.vertices), 10)
+    # bust_global = compute_global_descriptors(bust)
+    # bust_local = compute_local_descriptors(bust, len(bust.vertices), 10)
 
-    for i in bust_local.keys():
-        obj = bust_local[i]
-        mn, mx = hist_ranges[i]
-        plot_histogram('bust', 10, mn, mx, **{i: obj})
 
-    for j in glass_local.keys():
-        obj, mn, mx = glass_local[j]
-        print({j: (max(obj), max(obj) < mx)})
-        plot_histogram('glass', 10, mn, mx, **{j: obj})
+
+    # glasses_global = compute_global_descriptors(glasses)
+    # glasses_local = compute_local_descriptors(glasses, len(glasses.vertices), 10)
+
+
+    # print(bust_global)
+    # print(glasses_global)
+
+    # for i in bust_local.keys():
+    #     obj = bust_local[i]
+    #     mn, mx = hist_ranges[i]
+    #     plot_histogram('bust', 10, mn, mx, **{i: obj})
+
+    # for j in glasses_local.keys():
+    #     obj = glasses_local[j]
+    #     mn, mx = hist_ranges[j]
+    #     plot_histogram('glasses', 10, mn, mx, **{j: obj})
 
     # meshes = read_dataset(dataset=dataset, n_meshes=10)
     # mesh_normalization(meshes.values())

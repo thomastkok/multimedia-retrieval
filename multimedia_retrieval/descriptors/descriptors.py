@@ -47,10 +47,10 @@ def compute_local_descriptors(mesh, sample_size, nr_bins):
     d_4 = compute_tetrahedron_volumes(mesh, sample_size)
 
     local_features = {}
-    local_features['A3'] = a_3
-    local_features['D1'] = d_1
-    local_features['D2'] = d_2
-    local_features['D3'] = d_3
-    local_features['D4'] = d_4
+    local_features['A3'] = np.histogram(a_3, nr_bins)
+    local_features['D1'] = np.histogram(d_1, nr_bins)
+    local_features['D2'] = np.histogram(d_2, nr_bins)
+    local_features['D3'] = np.histogram(d_3, nr_bins)
+    local_features['D4'] = np.histogram(d_4, nr_bins)
 
     return local_features
