@@ -1,10 +1,19 @@
 import random
-from math import pi
+from math import pi, sqrt
 
 import numpy as np
 import open3d
 import trimesh
 
+
+def get_hist_ranges():
+    return {
+        'A3': (0, 180),
+        'D1': (0, sqrt(3)),
+        'D2': (0, sqrt(3)),
+        'D3': (0, sqrt(3) / 2),
+        'D4': (0, 1)
+    }
 
 def sample_points(mesh, sample_size, num_indices, func, **kwargs):
     """
