@@ -4,9 +4,6 @@ from .datasets.datasets import read_dataset, read_mesh
 from .descriptors.descriptors import (compute_global_descriptors,
                                       compute_local_descriptors)
 
-from .descriptors.helpers import (get_hist_ranges)
-
-
 from .filter.filter import filter_meshes, refine_outlier
 from .normalization.normalization import (feature_normalization,
                                           mesh_normalization)
@@ -16,9 +13,6 @@ from .histograms.histograms import plot_histogram
 
 
 def run():
-
-    hist_ranges = get_hist_ranges()
-
     dataset = input('Please specify the dataset (princeton/labeled): ')
     if not dataset:
         dataset = 'labeled'
@@ -26,16 +20,24 @@ def run():
     bust = read_mesh('/home/ruben/Desktop/LabeledDB_new/Bust/310.off')
     glasses = read_mesh('/home/ruben/Desktop/LabeledDB_new/Glasses/49.off')
 
-    meshes = [bust, glasses]
+    arm1 = read_mesh('/home/ruben/Desktop/LabeledDB_new/Armadillo/293.off')
+    arm2 = read_mesh('/home/ruben/Desktop/LabeledDB_new/Armadillo/295.off')
+
+    meshes = [arm1, arm2]
     mesh_normalization(meshes)
 
-    draw_mesh(glasses)
+    # draw_mesh(arm1)
+    # draw_mesh(arm2)
 
     # bust_global = compute_global_descriptors(bust)
-    bust_local = compute_local_descriptors(bust, len(bust.vertices), 10)
+    _, bust_vals = compute_local_descriptors(bust, len(bust.vertices), 10)
+
+    plot_histogram('bust', 10, (3, 2), **bust_vals)
+
 
     # glasses_global = compute_global_descriptors(glasses)
-    # glasses_local = compute_local_descriptors(glasses, len(glasses.vertices), 10)
+    _, glasses_local = compute_local_descriptors(glasses, len(glasses.vertices), 10)
+    plot_histogram('glasses', 10, **glasses_local)
 
 
     # print(bust_global)
