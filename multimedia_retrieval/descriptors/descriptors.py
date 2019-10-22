@@ -66,11 +66,4 @@ def compute_local_descriptors(mesh, sample_size, nr_bins):
     local_features['D4'] = np.histogram(
         d_4, nr_bins, range=(hist_ranges['D4']))
 
-    hist_values = {}
-    hist_values['A3'] = a_3
-    hist_values['D1'] = d_1
-    hist_values['D2'] = d_2
-    hist_values['D3'] = d_3
-    hist_values['D4'] = d_4
-
-    return pd.Series(local_features), hist_values
+    return pd.Series(local_features)
