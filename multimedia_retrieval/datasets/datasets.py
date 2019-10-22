@@ -53,7 +53,7 @@ def read_dataset(dataset, file_path=None, n_meshes=None, features=False):
 
     """
     if n_meshes:
-        total = {'princeton': 1814, 'labeled': 360}
+        total = {'princeton': 1814, 'labeled': 380}
         step = total[dataset] // n_meshes
         since_last_step = -1
     meshes = {}
