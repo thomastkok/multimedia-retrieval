@@ -83,7 +83,10 @@ def read_dataset(dataset, file_path=None, n_meshes=None, features=False):
                     index = file.split('.', 1)[0].replace('m', '')
                     if features:
                         mesh_normalization(mesh)
-                        meshes[index] = compute_global_descriptors(mesh)
+                        meshes[index] = pd.concat([
+                            compute_global_descriptors(mesh),
+                            compute_local_descriptors(mesh, 100, 10),
+                        ])
                         paths[index] = root + '/' + file
                     else:
                         meshes[index] = mesh

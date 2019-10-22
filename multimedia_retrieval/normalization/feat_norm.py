@@ -1,4 +1,5 @@
-from numpy import std, mean
+from numpy import std, mean, asarray
+import pandas as pd
 
 
 def rescale(feature):
@@ -36,10 +37,16 @@ def normalize_histogram(feature):
         feature (pd.Series): List of histograms.
 
     """
-    for histogram in feature:
-        bins = histogram[0]
-        bs = bins.sum()
-        bins = [x / bs for x in bins]
+    # print(feature)
+    # for histogram in feature:
+    bins = feature[0]
+    bs = bins.sum()
+    bins = [x / bs for x in bins]
+    return (asarray(bins), feature[1])
+
+
+def normalize_histograms(features):
+    return pd.Series([normalize_histogram(x) for x in features])
 
 
 def rescale_to(value, min, max):

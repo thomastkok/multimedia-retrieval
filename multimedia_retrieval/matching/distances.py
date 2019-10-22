@@ -29,3 +29,26 @@ def earth_movers(one, two):
        sum(two) < 0.99 or sum(two) > 1.01):
         raise ValueError('Sum of all feature values must be 1')
     return wasserstein_distance(one, two)
+
+
+def compare(one, two):
+    """
+    Compares two feature vectors of both histogram and feature values.
+    Returns the distance.
+
+    One and two should be sorted the same. Each value should be compared.
+    If all are numeric values, euclidean or cosine can work. If not,
+    earth movers is used for the histograms.
+    """
+    print(one)
+    print('-----------')
+    print(two)
+    if len(one) != len(two):
+        raise ValueError('Length of both features must be the same')
+    distances = []
+    for i in range(len(one)):
+        if isinstance(one[i], tuple):
+            distances.append(earth_movers(one[i], two[i]))
+        else:
+            distances.append(abs(one[i] - two[i]))
+    return np.linalg.norm(distances)
