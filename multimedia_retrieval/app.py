@@ -35,7 +35,7 @@ def initialize():
                                        n_meshes=10, features=True)
         norm_infos = {}
 
-        for name, series in features.iterrows():
+        for name, series in features.iteritems():
             if not isinstance(series[0], tuple):
                 norm_infos[name] = {
                     'mean': mean(series),
@@ -45,7 +45,7 @@ def initialize():
                 }
                 feature_normalization(series)
             else:
-                features.loc[name] = list(feature_normalization(series))
+                features[name] = list(feature_normalization(series))
 
         f[dataset] = features
         p[dataset] = paths

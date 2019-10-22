@@ -33,8 +33,8 @@ def match_shapes(mesh_features, dataset_features, k=None):
     the original mesh feature set.
     """
     results = {}
-    for data_point in dataset_features:
-        dist = compare(mesh_features, dataset_features[data_point])
+    for data_point, dp_features in dataset_features.iterrows():
+        dist = compare(mesh_features, dp_features)
         results[data_point] = dist
 
     shapes = pd.Series(results).sort_values()

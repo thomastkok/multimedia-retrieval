@@ -94,8 +94,8 @@ def read_dataset(dataset, file_path=None, n_meshes=None, features=False):
                         n_meshes_loaded = n_meshes_loaded + 1
                         if n_meshes_loaded >= n_meshes:
                             if features:
-                                return pd.DataFrame(meshes), pd.Series(paths)
+                                return pd.DataFrame(meshes).T, pd.Series(paths)
                             return pd.Series(meshes)
     if features:
-        return pd.DataFrame(meshes), pd.Series(paths)
+        return pd.DataFrame(meshes).T, pd.Series(paths)
     return pd.Series(meshes)
