@@ -6,9 +6,6 @@ from .datasets.datasets import read_dataset, read_mesh
 from .descriptors.descriptors import (compute_global_descriptors,
                                       compute_local_descriptors)
 
-from .descriptors.helpers import (get_hist_ranges)
-
-
 from .filter.filter import filter_meshes, refine_outlier
 from .interface.interface import create_interface
 from .normalization.normalization import (feature_normalization,

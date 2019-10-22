@@ -4,6 +4,7 @@ from math import pi, sqrt
 import numpy as np
 import open3d
 import trimesh
+import sys
 
 
 def get_hist_ranges():
