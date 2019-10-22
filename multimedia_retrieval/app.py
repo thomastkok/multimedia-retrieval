@@ -36,13 +36,16 @@ def initialize():
         norm_infos = {}
 
         for name, series in features.iterrows():
-            norm_infos[name] = {
-                'mean': mean(series),
-                'sd': std(series),
-                'min': min(series),
-                'max': max(series)
-            }
-            feature_normalization([series])
+            if not isinstance(series[0], tuple):
+                norm_infos[name] = {
+                    'mean': mean(series),
+                    'sd': std(series),
+                    'min': min(series),
+                    'max': max(series)
+                }
+                feature_normalization(series)
+            else:
+                features.loc[name] = list(feature_normalization(series))
 
         f[dataset] = features
         p[dataset] = paths

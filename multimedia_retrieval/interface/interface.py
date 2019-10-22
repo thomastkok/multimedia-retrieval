@@ -15,7 +15,7 @@ def create_interface(features, paths, norm_info):
     layout = [
         [sg.Text('Welcome to the 3D Shape Retrieval Program!')],
         [sg.Text('Select your dataset'),
-         sg.InputCombo(('Princeton', 'Labeled'), size=(20, 1))],
+         sg.InputCombo(('Labeled', 'Princeton'), size=(20, 1))],
         [sg.Text('Select your query shape:'), sg.Input(), sg.FileBrowse()],
         [sg.Button('Ok'), sg.Button('Cancel')]
     ]
