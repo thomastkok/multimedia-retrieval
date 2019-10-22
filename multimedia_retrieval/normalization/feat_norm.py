@@ -37,10 +37,10 @@ def normalize_histogram(feature):
         feature (pd.Series): List of histograms.
 
     """
-    bins = feature[0]
-    bs = bins.sum()
-    bins = [x / bs for x in bins]
-    return (asarray(bins), feature[1])
+    counts = feature[0]
+    bs = counts.sum()
+    counts = [x / bs for x in bins]
+    return (asarray(counts), feature[1])
 
 
 def normalize_histograms(features):
