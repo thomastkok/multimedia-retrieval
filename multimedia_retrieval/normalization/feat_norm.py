@@ -39,7 +39,7 @@ def normalize_histogram(feature):
     """
     counts = feature[0]
     bs = counts.sum()
-    counts = [x / bs for x in bins]
+    counts = [x / bs for x in counts]
     return (asarray(counts), feature[1])
 
 
