@@ -6,7 +6,7 @@ def rescale(feature):
     Rescales the feature values to [0, 1].
 
     Args:
-        feature (list[num]): All values of this feature in the dataset.
+        feature (pd.Series): All values of this feature in the dataset.
 
     """
     lo = min(feature)
@@ -20,7 +20,7 @@ def standardize(feature):
     with new feature values equal to standard deviation from original mean.
 
     Args:
-        feature (list[num]): All values of this feature in the dataset.
+        feature (pd.Series): All values of this feature in the dataset.
 
     """
     avg = mean(feature)
@@ -33,9 +33,20 @@ def normalize_histogram(feature):
     Normalizes all histograms to a total area of 1.
 
     Args:
-        feature (list[list[num]]): List of histograms.
+        feature (pd.Series): List of histograms.
 
     """
     for histogram in feature:
-        all_bins = sum(histogram)
-        histogram[:] = [x / all_bins for x in feature]
+        bins = histogram[0]
+        bs = bins.sum()
+        bins = [x / bs for x in bins]
+
+
+def rescale_to(value, min, max):
+    """Rescales a single feature value to a certain range."""
+    return (value - min) / (max - min)
+
+
+def standardize_to(value, mean, sd):
+    """Standardizes a certain feature value to a certain distribution."""
+    return (value - mean) / sd

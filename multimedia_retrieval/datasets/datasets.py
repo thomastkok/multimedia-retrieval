@@ -1,6 +1,12 @@
-import open3d
-import trimesh
 import os
+
+import open3d
+import pandas as pd
+import trimesh
+
+from multimedia_retrieval.descriptors.descriptors import (
+    compute_global_descriptors, compute_local_descriptors)
+from multimedia_retrieval.normalization.normalization import mesh_normalization
 
 
 def read_mesh(file_path):
@@ -30,7 +36,7 @@ def read_mesh(file_path):
     return mesh
 
 
-def read_dataset(dataset, file_path=None, n_meshes=None):
+def read_dataset(dataset, file_path=None, n_meshes=None, features=False):
     """
     Reads either the princeton or labeled dataset,
     located at the specified file path,
@@ -46,7 +52,11 @@ def read_dataset(dataset, file_path=None, n_meshes=None):
         dict{int: TriangleMesh}: Returns a dictionary of all meshes.
 
     """
+    total = {'princeton': 1814, 'labeled': 360}
+    step = total[dataset] // n_meshes
+    since_last_step = -1
     meshes = {}
+    paths = {}
     n_meshes_loaded = 0
     if dataset == 'princeton':
         if not file_path:
@@ -62,11 +72,26 @@ def read_dataset(dataset, file_path=None, n_meshes=None):
         if files:
             for file in files:
                 if file.endswith('.off'):
+                    if n_meshes:
+                        since_last_step += 1
+                        if since_last_step == step:
+                            since_last_step = 0
+                        if since_last_step > 0:
+                            continue
                     mesh = read_mesh(root + '/' + file)
                     index = file.split('.', 1)[0].replace('m', '')
-                    meshes[index] = mesh
+                    if features:
+                        mesh_normalization(mesh)
+                        meshes[index] = compute_global_descriptors(mesh)
+                        paths[index] = root + '/' + file
+                    else:
+                        meshes[index] = mesh
                     if n_meshes:
                         n_meshes_loaded = n_meshes_loaded + 1
                         if n_meshes_loaded >= n_meshes:
-                            return meshes
-    return meshes
+                            if features:
+                                return pd.DataFrame(meshes), pd.Series(paths)
+                            return pd.DataFrame(meshes)
+    if features:
+        return pd.DataFrame(meshes), pd.Series(paths)
+    return pd.DataFrame(meshes)
