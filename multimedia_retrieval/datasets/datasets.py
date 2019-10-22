@@ -52,9 +52,10 @@ def read_dataset(dataset, file_path=None, n_meshes=None, features=False):
         dict{int: TriangleMesh}: Returns a dictionary of all meshes.
 
     """
-    total = {'princeton': 1814, 'labeled': 360}
-    step = total[dataset] // n_meshes
-    since_last_step = -1
+    if n_meshes:
+        total = {'princeton': 1814, 'labeled': 360}
+        step = total[dataset] // n_meshes
+        since_last_step = -1
     meshes = {}
     paths = {}
     n_meshes_loaded = 0
@@ -91,7 +92,7 @@ def read_dataset(dataset, file_path=None, n_meshes=None, features=False):
                         if n_meshes_loaded >= n_meshes:
                             if features:
                                 return pd.DataFrame(meshes), pd.Series(paths)
-                            return pd.DataFrame(meshes)
+                            return pd.Series(meshes)
     if features:
         return pd.DataFrame(meshes), pd.Series(paths)
-    return pd.DataFrame(meshes)
+    return pd.Series(meshes)
