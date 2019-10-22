@@ -35,7 +35,6 @@ def match_shapes(mesh_features, dataset_features, k=None):
     results = {}
     for data_point in dataset_features:
         dist = compare(mesh_features, dataset_features[data_point])
-        # dist = euclidean(mesh_features, dataset_features[data_point])
         results[data_point] = dist
 
     shapes = pd.Series(results).sort_values()

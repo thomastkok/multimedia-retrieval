@@ -40,15 +40,12 @@ def compare(one, two):
     If all are numeric values, euclidean or cosine can work. If not,
     earth movers is used for the histograms.
     """
-    print(one)
-    print('-----------')
-    print(two)
     if len(one) != len(two):
         raise ValueError('Length of both features must be the same')
     distances = []
     for i in range(len(one)):
         if isinstance(one[i], tuple):
-            distances.append(earth_movers(one[i], two[i]))
+            distances.append(earth_movers(one[i][0], two[i][0]))
         else:
             distances.append(abs(one[i] - two[i]))
     return np.linalg.norm(distances)
