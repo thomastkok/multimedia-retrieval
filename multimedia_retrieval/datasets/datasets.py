@@ -96,10 +96,11 @@ def read_dataset(dataset, file_path=None, n_meshes=None, features=False):
                         if n_meshes_loaded >= n_meshes:
                             if features:
                                 return (pd.DataFrame(meshes).T,
-                                        pd.Series(paths, name='paths').rename_axis('mesh'))
+                                        pd.Series(paths,
+                                        name='paths').rename_axis('mesh'))
                             return pd.Series(meshes)
     if features:
-        return (pd.DataFrame(meshes).T, 
+        return (pd.DataFrame(meshes).T,
                 pd.Series(paths, name='paths').rename_axis('mesh'))
     return pd.Series(meshes)
 
@@ -117,8 +118,8 @@ def read_cache():
     paths = {}
     norm_info = {}
     for dataset in ('princeton', 'labeled'):
-        features[dataset] = pd.read_csv(f'./cache/features_{dataset}.csv', sep='#',
-                                        index_col=0,
+        features[dataset] = pd.read_csv(f'./cache/features_{dataset}.csv',
+                                        sep='#', index_col=0,
                                         converters={
                                             'A3': hist_convert,
                                             'D1': hist_convert,
@@ -126,7 +127,8 @@ def read_cache():
                                             'D3': hist_convert,
                                             'D4': hist_convert
                                         })
-        paths[dataset] = pd.read_csv(f'./cache/paths_{dataset}.csv', squeeze=True,
-                                     index_col=0, header=0)
-        norm_info[dataset] = pd.read_csv(f'./cache/norm_info_{dataset}.csv', index_col=0)
+        paths[dataset] = pd.read_csv(f'./cache/paths_{dataset}.csv',
+                                     squeeze=True, index_col=0, header=0)
+        norm_info[dataset] = pd.read_csv(f'./cache/norm_info_{dataset}.csv',
+                                         index_col=0)
     return features, paths, norm_info

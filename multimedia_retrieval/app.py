@@ -53,7 +53,7 @@ def initialize():
                     'min': min(series),
                     'max': max(series)
                 }
-                feature_normalization(series)
+                features[name] = list(feature_normalization(series))
             else:
                 features[name] = list(feature_normalization(series))
 
@@ -61,4 +61,3 @@ def initialize():
         p[dataset] = paths
         n[dataset] = pd.DataFrame(norm_infos)
     return pd.Series(f), pd.Series(p), pd.Series(n)
-
