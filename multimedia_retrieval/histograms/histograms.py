@@ -12,6 +12,7 @@ from multimedia_retrieval.descriptors.helpers import get_hist_ranges
 def plot_histogram(title, nr_bins, n_rows_cols=None, **kwargs):
     """
     Plots one or more histograms (as subplots) given a specified bin size.
+    And an optional tuple containing the number of rows/cols of the subplots.
     The histograms share the y-axis (the counts).
     """
 
@@ -33,6 +34,7 @@ def plot_histogram(title, nr_bins, n_rows_cols=None, **kwargs):
 
     faxs = axs.reshape(-1)
     num_axs = len(faxs)
+
     i = 0
 
     for kw in kwargs.keys():

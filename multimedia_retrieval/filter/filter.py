@@ -42,25 +42,20 @@ def filter_meshes(dataset, file_path=None, n_meshes=None,
     mesh_properties = get_mesh_properties(meshes, classes)
     mesh_stats = get_stats(mesh_properties)
 
-    plot_filter_feature(mesh_properties, mesh_stats, 'nr_faces')
     output_filter(output_file, mesh_properties, mesh_stats)
 
 
-def plot_filter_feature(mesh_props, mesh_stats, feature_name):
-    min_feature = mesh_stats['min'][feature_name]
-    max_feature = mesh_stats['max'][feature_name]
-
-    feature_meshes = get_mesh_property_array(mesh_props, feature_name)
-    plot_histogram(feature_meshes, 5, min_feature, max_feature)
-
-
 def fix_outliers(meshes, face_average, offset=1.3):
+    """
+    Fixes the meshes that are considered outliers.
+    The mesh outliers are those that have 30% more or less vertices and faces.
+    """
     lower_bound = face_average * (1/offset)
     upper_bound = face_average * offset
     for mesh_key in meshes.keys():
         mesh = meshes[mesh_key]
         if (len(mesh.triangles) < lower_bound or
-           len(mesh.vertices) < lower_bound):
+                len(mesh.vertices) < lower_bound):
             mesh = refine_outlier(
                 mesh, face_average, lower_bound, upper_bound, True)
         elif (len(mesh.triangles) > upper_bound or
@@ -71,6 +66,12 @@ def fix_outliers(meshes, face_average, offset=1.3):
 
 
 def get_average_obj(mesh_stats, mesh_props):
+    """
+    Obtains the average objects found in a dataset.
+    It computes the smallest distance between the vertices and faces
+    With the average vertices and faces.
+    The distance is computed using the Manhattan distance.
+    """
     avg_faces = int(mesh_stats['avg']['nr_faces'])
     avg_vertices = int(mesh_stats['avg']['nr_vertices'])
 

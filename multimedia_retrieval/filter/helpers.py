@@ -38,6 +38,9 @@ def get_classes(file_path, dataset):
 
 
 def output_filter(output_file, mesh_properties, mesh_stats):
+    """
+    Outputs the filter in the form a csv file with each property computed for each mesh.
+    """  
     if output_file and not output_file.endswith('.csv'):
         raise ValueError(f'Output file ({output_file}) should end with .csv')
     elif output_file:
@@ -84,6 +87,10 @@ def get_stat_property_names():
 
 
 def get_mesh_property_array(mesh_props, feature_name):
+    """
+    Get the array of a property for each mesh.
+    E.g. obtains the min values of all meshes.
+    """
     features = []
     for mesh_key in mesh_props.keys():
         mesh = mesh_props[mesh_key]
@@ -167,8 +174,5 @@ def refine_outlier(mesh, face_average, lb, ub, is_small):
     mesh = mesh.remove_duplicated_triangles()
     mesh = mesh.remove_duplicated_vertices()
     mesh = mesh.remove_unreferenced_vertices()
-
-    print(len(mesh.triangles))
-    print(len(mesh.vertices))
 
     return mesh
