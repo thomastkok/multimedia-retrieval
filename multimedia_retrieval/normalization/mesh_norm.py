@@ -32,6 +32,9 @@ def scale_to_unit(mesh):
 
 
 def compute_angle(v1, v2):
+    """
+    Computes the angle between two vectors in radians.
+    """
     cos_angle = np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
     angle = np.arccos(cos_angle)
 
@@ -39,6 +42,15 @@ def compute_angle(v1, v2):
 
 
 def align_eigen_to_axis(mesh, axs, ev):
+    """
+    Aligns one eigen vector to a predefined axis.
+    It uses a rotation of the axis-angle representation.
+    In order to obtain the axis of rotation we compute the cross product
+    Then, we normalize it so we get a unit vector
+    Then, the product of the angle and this normalized unit vector
+    equals the rotation vector that we can use to align the
+    eigenvalues with the axes.
+    """
     rot_axis = np.cross(ev, axs)
     unit_rot_axis = rot_axis / np.linalg.norm(rot_axis)
     angle = compute_angle(ev, axs)
@@ -51,7 +63,6 @@ def align_to_eigenvectors(mesh):
     Aligns the mesh,
     such that its eigenvectors are the same direction as the axes.
     """
-
     x = np.asarray([1, 0, 0])
     y = np.asarray([0, 1, 0])
 

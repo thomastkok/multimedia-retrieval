@@ -26,8 +26,9 @@ from .helpers import (compute_angles, compute_compactness, compute_diameter,
 def compute_global_descriptors(mesh):
     """
     Computes the global descriptors as described by the assignment.
-    Returns a dictionary containing the global descriptors.
+    Returns a pandas series (1D array) containing the global descriptors.
     """
+
     tri_mesh = mesh_to_trimesh(mesh)
 
     global_features = {}
@@ -43,7 +44,7 @@ def compute_global_descriptors(mesh):
 def compute_local_descriptors(mesh, sample_size, nr_bins):
     """
     Computes the local descriptors as described by the assignment.
-    Returns a dictionary containing the local descriptors.
+    Returns a pandas series (1D array) containing the local descriptors.
     """
 
     hist_ranges = get_hist_ranges()
