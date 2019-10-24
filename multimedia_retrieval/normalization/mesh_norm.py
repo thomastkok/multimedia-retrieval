@@ -39,16 +39,6 @@ def compute_angle(v1, v2):
     return angle
 
 
-# def get_rotation_vector(axis, v1):
-#     angle = compute_angle(axis, v1)
-
-#     print(angle)
-#     v_rot = v1 * np.cos(angle) + np.cross(axis, v1) * np.sin(angle) + \
-#         axis * np.dot(axis, v1) * (1 - np.cos(angle))
-
-#     return v_rot
-
-
 def align_eigen_to_axis(mesh, axs, ev):
 
     rot_axis = np.cross(ev, axs)
