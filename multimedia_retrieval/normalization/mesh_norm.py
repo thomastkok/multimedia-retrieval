@@ -1,5 +1,10 @@
 import open3d
+import trimesh
 import numpy as np
+
+from math import pi
+
+from multimedia_retrieval.mesh_conversion.helpers import mesh_to_trimesh
 
 
 def translate_to_origin(mesh):
@@ -26,17 +31,51 @@ def scale_to_unit(mesh):
     mesh.scale(factor, center=True)
 
 
+def compute_angle(v1, v2):
+
+    cos_angle = np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
+    angle = np.arccos(cos_angle)
+
+    return angle
+
+
+# def get_rotation_vector(axis, v1):
+#     angle = compute_angle(axis, v1)
+
+#     print(angle)
+#     v_rot = v1 * np.cos(angle) + np.cross(axis, v1) * np.sin(angle) + \
+#         axis * np.dot(axis, v1) * (1 - np.cos(angle))
+
+#     return v_rot
+
+
+def align_eigen_to_axis(mesh, axs, ev):
+
+    rot_axis = np.cross(ev, axs)
+    unit_rot_axis = rot_axis / np.linalg.norm(rot_axis)
+    angle = compute_angle(ev, axs)
+    axis_angle = angle * unit_rot_axis
+    mesh.rotate(axis_angle, type=open3d.geometry.RotationType.AxisAngle)
+
+
 def align_to_eigenvectors(mesh):
     """
     Aligns the mesh,
     such that its eigenvectors are the same direction as the axes.
     """
+
+    x = np.asarray([1, 0, 0])
+    y = np.asarray([0, 1, 0])
+
     vertices = np.asarray(mesh.vertices)
     eigenvectors = np.linalg.eigh(np.cov(vertices, rowvar=False))[1]
-    mesh.vertices = open3d.utility.Vector3dVector(
-                      np.stack([vertices @ eigenvectors[:, 0],
-                                vertices @ eigenvectors[:, 1],
-                                vertices @ eigenvectors[:, 2]], axis=1))
+
+    align_eigen_to_axis(mesh, x, eigenvectors[:, 2])
+
+    vertices = np.asarray(mesh.vertices)
+    eigenvectors = np.linalg.eigh(np.cov(vertices, rowvar=False))[1]
+
+    align_eigen_to_axis(mesh, y, eigenvectors[:, 1])
 
 
 def flip_mesh(mesh):
