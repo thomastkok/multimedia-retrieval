@@ -14,6 +14,7 @@ from .normalization.normalization import (feature_normalization,
 from .visualization.visualization import draw_mesh, draw_meshes
 
 from .histograms.histograms import plot_histogram
+from .evaluation.evaluation import evaluate
 
 
 def run():
@@ -28,7 +29,8 @@ def run():
             write_cache(features, paths, norm_info)
             print('Wrote to cache.')
 
-    create_interface(features, paths, norm_info)
+    evaluate(features, paths, norm_info)
+    # create_interface(features, paths, norm_info)
 
 
 def initialize():
