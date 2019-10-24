@@ -32,7 +32,6 @@ def scale_to_unit(mesh):
 
 
 def compute_angle(v1, v2):
-
     cos_angle = np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
     angle = np.arccos(cos_angle)
 
@@ -40,7 +39,6 @@ def compute_angle(v1, v2):
 
 
 def align_eigen_to_axis(mesh, axs, ev):
-
     rot_axis = np.cross(ev, axs)
     unit_rot_axis = rot_axis / np.linalg.norm(rot_axis)
     angle = compute_angle(ev, axs)
