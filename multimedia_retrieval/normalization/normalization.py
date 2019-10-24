@@ -1,4 +1,5 @@
-from .feat_norm import (normalize_histogram, rescale, rescale_to, standardize,
+from .feat_norm import (normalize_histogram, normalize_histograms,
+                        rescale, rescale_to, standardize,
                         standardize_to)
 from .mesh_norm import (align_to_eigenvectors, flip_mesh, scale_to_unit,
                         translate_to_origin)
@@ -19,13 +20,18 @@ def mesh_normalization(meshes):
         scale_to_unit(mesh)
 
 
-def feature_normalization(features):
-    """Normalizes all given features."""
+def feature_normalization(feature):
+    """Normalizes the given feature."""
+    if isinstance(feature[0], tuple):
+        feature = normalize_histograms(feature)
+    else:
+        feature = standardize(feature)
+    return feature
+
+
+def features_normalization(features):
     for feature in features:
-        if isinstance(feature, tuple):
-            normalize_histogram(feature)
-        else:
-            standardize(feature)
+        feature = feature_normalization(feature)
     return features
 
 
@@ -34,7 +40,7 @@ def normalize_to(values, norm_info):
     new_values = {}
     for name, value in values.items():
         if isinstance(value, tuple):
-            new_values[name] = normalize_histogram([value])
+            new_values[name] = normalize_histogram(value)
         else:
             new_values[name] = standardize_to(value,
                                               norm_info[name]['mean'],
