@@ -18,7 +18,7 @@ from .histograms.histograms import plot_histogram
 
 def run():
     cache = input('Read from cache (yes/no)?\n')
-    if cache.lower().startswith('yes'):
+    if cache.lower().startswith('y'):
         features, paths, norm_info = read_cache()
         print('Read from cache.')
     else:
