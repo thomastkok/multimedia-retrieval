@@ -22,13 +22,13 @@ def feature_normalization(feature):
     if isinstance(feature[0], tuple):
         feature = normalize_histograms(feature)
     else:
-        standardize(feature)
+        feature = standardize(feature)
     return feature
 
 
 def features_normalization(features):
     for feature in features:
-        feature_normalization(feature)
+        feature = feature_normalization(feature)
     return features
 
 

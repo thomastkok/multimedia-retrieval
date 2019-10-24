@@ -1,8 +1,9 @@
 import open3d
 import pandas as pd
-from numpy import mean, std
+import numpy as np
 
-from .datasets.datasets import read_dataset, read_mesh
+from .datasets.datasets import (read_dataset, read_mesh,
+                                read_cache, write_cache)
 from .descriptors.descriptors import (compute_global_descriptors,
                                       compute_local_descriptors)
 
@@ -16,7 +17,16 @@ from .histograms.histograms import plot_histogram
 
 
 def run():
-    features, paths, norm_info = initialize()
+    cache = input('Read from cache (yes/no)?\n')
+    if cache.lower().startswith('y'):
+        features, paths, norm_info = read_cache()
+        print('Read from cache.')
+    else:
+        features, paths, norm_info = initialize()
+        cache = input('Write to cache (yes/no)?\n')
+        if cache.lower().startswith('y'):
+            write_cache(features, paths, norm_info)
+            print('Wrote to cache.')
 
     create_interface(features, paths, norm_info)
 
@@ -35,17 +45,17 @@ def initialize():
                                        n_meshes=10, features=True)
         norm_infos = {}
 
-        for name, series in features.iterrows():
+        for name, series in features.iteritems():
             if not isinstance(series[0], tuple):
                 norm_infos[name] = {
-                    'mean': mean(series),
-                    'sd': std(series),
+                    'mean': np.mean(series),
+                    'sd': np.std(series),
                     'min': min(series),
                     'max': max(series)
                 }
-                feature_normalization(series)
+                features[name] = list(feature_normalization(series))
             else:
-                features.loc[name] = list(feature_normalization(series))
+                features[name] = list(feature_normalization(series))
 
         f[dataset] = features
         p[dataset] = paths

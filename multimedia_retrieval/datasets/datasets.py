@@ -7,6 +7,7 @@ import trimesh
 from multimedia_retrieval.descriptors.descriptors import (
     compute_global_descriptors, compute_local_descriptors)
 from multimedia_retrieval.normalization.normalization import mesh_normalization
+from .helpers import hist_convert
 
 
 def read_mesh(file_path):
@@ -94,8 +95,40 @@ def read_dataset(dataset, file_path=None, n_meshes=None, features=False):
                         n_meshes_loaded = n_meshes_loaded + 1
                         if n_meshes_loaded >= n_meshes:
                             if features:
-                                return pd.DataFrame(meshes), pd.Series(paths)
+                                return (pd.DataFrame(meshes).T,
+                                        pd.Series(paths,
+                                        name='paths').rename_axis('mesh'))
                             return pd.Series(meshes)
     if features:
-        return pd.DataFrame(meshes), pd.Series(paths)
+        return (pd.DataFrame(meshes).T,
+                pd.Series(paths, name='paths').rename_axis('mesh'))
     return pd.Series(meshes)
+
+
+def write_cache(features, paths, norm_info):
+    for dataset in ('princeton', 'labeled'):
+        features[dataset].to_csv(f'./cache/features_{dataset}.csv', sep='#',
+                                 index=True)
+        paths[dataset].to_csv(f'./cache/paths_{dataset}.csv', header=True)
+        norm_info[dataset].to_csv(f'./cache/norm_info_{dataset}.csv')
+
+
+def read_cache():
+    features = {}
+    paths = {}
+    norm_info = {}
+    for dataset in ('princeton', 'labeled'):
+        features[dataset] = pd.read_csv(f'./cache/features_{dataset}.csv',
+                                        sep='#', index_col=0,
+                                        converters={
+                                            'A3': hist_convert,
+                                            'D1': hist_convert,
+                                            'D2': hist_convert,
+                                            'D3': hist_convert,
+                                            'D4': hist_convert
+                                        })
+        paths[dataset] = pd.read_csv(f'./cache/paths_{dataset}.csv',
+                                     squeeze=True, index_col=0, header=0)
+        norm_info[dataset] = pd.read_csv(f'./cache/norm_info_{dataset}.csv',
+                                         index_col=0)
+    return features, paths, norm_info
