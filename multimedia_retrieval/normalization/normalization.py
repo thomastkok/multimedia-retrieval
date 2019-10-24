@@ -5,6 +5,9 @@ from .mesh_norm import (align_to_eigenvectors, flip_mesh, scale_to_unit,
                         translate_to_origin)
 import pandas as pd
 
+from multimedia_retrieval.visualization.visualization import (draw_mesh,
+                                                              draw_meshes)
+
 
 def mesh_normalization(meshes):
     """Normalizes all given meshes."""

@@ -163,16 +163,16 @@ def compute_compactness(tri_mesh):
     The sphericity equals one if the shape is perfect sphere.
     """
 
-    compactness = -1
-
     # Mesh should be watertight (and thus have a volume)
     if tri_mesh.is_volume:
         area = tri_mesh.area
         volume = tri_mesh.volume
-
         compactness = ((pi ** (1/3)) * (6 * volume)**(2/3)) / area
 
-    return compactness
+        return compactness
+    
+    else:
+        raise ValueError("Cannot compute compactness. Mesh is not watertight.")
 
 
 def compute_eccentricity(mesh):
