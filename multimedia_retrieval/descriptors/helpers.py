@@ -170,7 +170,7 @@ def compute_compactness(tri_mesh):
         compactness = ((pi ** (1/3)) * (6 * volume)**(2/3)) / area
 
         return compactness
-    
+
     else:
         raise ValueError("Cannot compute compactness. Mesh is not watertight.")
 

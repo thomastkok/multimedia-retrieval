@@ -1,4 +1,5 @@
 import os
+from shutil import rmtree
 
 import open3d
 import pandas as pd
@@ -8,6 +9,7 @@ from multimedia_retrieval.descriptors.descriptors import (
     compute_global_descriptors, compute_local_descriptors)
 from multimedia_retrieval.normalization.normalization import mesh_normalization
 from .helpers import hist_convert
+from multimedia_retrieval.mesh_conversion.helpers import mesh_to_trimesh
 
 
 def read_mesh(file_path):
@@ -54,7 +56,7 @@ def read_dataset(dataset, file_path=None, n_meshes=None, features=False):
 
     """
     if n_meshes:
-        total = {'princeton': 1814, 'labeled': 380}
+        total = {'princeton': 301, 'labeled': 380}
         step = total[dataset] // n_meshes
         since_last_step = -1
     meshes = {}
@@ -132,3 +134,25 @@ def read_cache():
         norm_info[dataset] = pd.read_csv(f'./cache/norm_info_{dataset}.csv',
                                          index_col=0)
     return features, paths, norm_info
+
+
+def remove_flawed_meshes(dataset, file_path=None):
+    if dataset == 'princeton':
+        if not file_path:
+            file_path = '../benchmark'
+        file_path = file_path + '/db'
+    elif dataset == 'labeled':
+        if not file_path:
+            file_path = '../LabeledDB_new'
+    else:
+        raise ValueError(f'{dataset} is not a known dataset, \
+                         should be either "princeton" or "labeled"')
+    for root, dirs, files in os.walk(file_path, topdown=True):
+        if files:
+            for file in files:
+                if file.endswith('.off'):
+                    mesh = read_mesh(root + '/' + file)
+                    index = file.split('.', 1)[0].replace('m', '')
+                    if not mesh_to_trimesh(mesh).is_volume:
+                        print(f'Removing mesh {index}, folder: {root}')
+                        rmtree(root)

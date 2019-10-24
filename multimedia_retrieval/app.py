@@ -3,7 +3,8 @@ import pandas as pd
 import numpy as np
 
 from .datasets.datasets import (read_dataset, read_mesh,
-                                read_cache, write_cache)
+                                read_cache, write_cache,
+                                remove_flawed_meshes)
 from .descriptors.descriptors import (compute_global_descriptors,
                                       compute_local_descriptors)
 
