@@ -16,14 +16,15 @@ from .visualization.visualization import draw_mesh, draw_meshes
 
 from .histograms.histograms import plot_histogram
 
-from .approximate_nearest_neighbors.approximate_nearest_neighbors import approximate_nn
+from .approximate_nearest_neighbors.approximate_nearest_neighbors import (
+    approximate_nn, approximate_nearpy)
 
 
 def run():
     cache = input('Read from cache (yes/no)?\n')
     if cache.lower().startswith('y'):
         features, paths, norm_info = read_cache()
-        approximate_nn(features['labeled'])
+        approximate_nearpy(features['labeled'])
         print('Read from cache.')
     else:
         features, paths, norm_info = initialize()
