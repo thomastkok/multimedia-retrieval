@@ -17,6 +17,9 @@ from .visualization.visualization import draw_mesh, draw_meshes
 from .histograms.histograms import plot_histogram
 from .evaluation.evaluation import evaluate
 
+from .approximate_nearest_neighbors.approximate_nearest_neighbors import \
+    approximate_nn
+
 
 def run():
     datasets = ['labeled']

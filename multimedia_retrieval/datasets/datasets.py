@@ -122,6 +122,7 @@ def read_cache(datasets=['princeton', 'labeled']):
     norm_info = {}
     for dataset in datasets:
         features[dataset] = pd.read_csv(f'./cache/features_{dataset}.csv',
+                                        encoding='utf-8',
                                         sep='#', index_col=0,
                                         converters={
                                             'A3': hist_convert,
