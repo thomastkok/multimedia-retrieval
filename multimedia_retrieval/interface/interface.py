@@ -3,7 +3,7 @@ import PySimpleGUI as sg
 from multimedia_retrieval.matching.matching import query_shape
 from multimedia_retrieval.visualization.visualization import draw_mesh
 from multimedia_retrieval.datasets.datasets import read_mesh
-from multimedia_retrieval.approximate_nearest_neighbors.approximate_nearest_neighbors import approximate_nn
+from multimedia_retrieval.ann.ann import approximate_nn
 
 
 def create_interface(features, paths, norm_info):
@@ -16,32 +16,45 @@ def create_interface(features, paths, norm_info):
     layout = [
         [sg.Text('Welcome to the 3D Shape Retrieval Program!')],
         [sg.Text('Select your dataset'),
-         sg.InputCombo(('Labeled', 'Princeton'), size=(20, 1))],
-        [sg.Text('Select your query shape:'), sg.Input(), sg.FileBrowse()],
-        [sg.Text('Select your distance calculation method:'), sg.Radio('Regular', group_id="RADIO1", enable_events=True, key='regular', default=True),
+         sg.InputCombo(('Labeled', 'Princeton'), size=(20, 1),
+                       key='dataset')],
+        [sg.Text('Input the id of your query shape:'),
+         sg.Input(key='query_id')],
+        [sg.Text('Select your query shape:'), sg.Input(key='query_shape'),
+         sg.FileBrowse()],
+        [sg.Text('Select your distance calculation method:'),
+         sg.Radio('Regular', group_id="RADIO1", enable_events=True,
+                  key='regular', default=True),
          sg.Radio('Ann', enable_events=True, group_id="RADIO1", key='ann')],
+        [sg.Text('Input k (the number of returned shapes):'),
+         sg.Slider(range=(1, 20), orientation='horizontal',
+                   default_value=3, key='k')],
         [sg.Button('Ok'), sg.Button('Cancel')]
     ]
 
     window = sg.Window('3D Shape Retrieval', layout)
 
     while True:
+        print(f'Values found in window are {window.read()}')
         event, values = window.read()
 
         if event in (None, 'Cancel'):
             break
         elif event in ('Ok'):
-            dataset = values[0].lower()
+            dataset = values['dataset'].lower()
+            if values['query_id'] and not values['query_id'].isdigit():
+                sg.PopupError(f'Query ID must be a digit, not {values["query_id"]}') 
             if dataset in features.keys():
-                mesh = values[1]
+                mesh = values['query_id'] or values['query_shape']
 
-                if window.element('regular').Get():
+                if values['regular']:
                     shapes = query_shape(
-                        mesh, features[dataset], norm_info[dataset])
-
-                elif window.element('ann').Get():
+                        mesh, features[dataset], norm_info[dataset],
+                        k=int(values['k']))
+                elif values['ann']:
                     shapes = approximate_nn(
-                        mesh, features[dataset], 100, 5, 10, norm_info[dataset])
+                        mesh, features[dataset], 100, 5,
+                        int(values['k']), norm_info[dataset])
 
                 for shape, dist in shapes.iteritems():
                     answer = sg.PopupYesNo(
