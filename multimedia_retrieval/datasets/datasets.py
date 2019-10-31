@@ -91,6 +91,7 @@ def read_dataset(dataset, file_path=None, n_meshes=None, features=False):
                         paths[index] = root + '/' + file
                     else:
                         meshes[index] = mesh
+                    print(f'Read mesh {index}.')
                     if n_meshes:
                         n_meshes_loaded = n_meshes_loaded + 1
                         if n_meshes_loaded >= n_meshes:
@@ -105,19 +106,19 @@ def read_dataset(dataset, file_path=None, n_meshes=None, features=False):
     return pd.Series(meshes)
 
 
-def write_cache(features, paths, norm_info):
-    for dataset in ('princeton', 'labeled'):
+def write_cache(features, paths, norm_info, datasets=['princeton', 'labeled']):
+    for dataset in datasets:
         features[dataset].to_csv(f'./cache/features_{dataset}.csv', sep='#',
                                  index=True)
         paths[dataset].to_csv(f'./cache/paths_{dataset}.csv', header=True)
         norm_info[dataset].to_csv(f'./cache/norm_info_{dataset}.csv')
 
 
-def read_cache():
+def read_cache(datasets=['princeton', 'labeled']):
     features = {}
     paths = {}
     norm_info = {}
-    for dataset in ('princeton', 'labeled'):
+    for dataset in datasets:
         features[dataset] = pd.read_csv(f'./cache/features_{dataset}.csv',
                                         sep='#', index_col=0,
                                         converters={

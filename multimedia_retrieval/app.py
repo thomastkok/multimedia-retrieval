@@ -18,22 +18,23 @@ from .evaluation.evaluation import evaluate
 
 
 def run():
+    datasets = ['labeled']
     cache = input('Read from cache (yes/no)?\n')
     if cache.lower().startswith('y'):
-        features, paths, norm_info = read_cache()
+        features, paths, norm_info = read_cache(datasets)
         print('Read from cache.')
     else:
-        features, paths, norm_info = initialize()
+        features, paths, norm_info = initialize(datasets)
         cache = input('Write to cache (yes/no)?\n')
         if cache.lower().startswith('y'):
-            write_cache(features, paths, norm_info)
+            write_cache(features, paths, norm_info, datasets)
             print('Wrote to cache.')
 
-    evaluate(features, paths, norm_info)
-    # create_interface(features, paths, norm_info)
+    # evaluate(features, paths, norm_info)
+    create_interface(features, paths, norm_info)
 
 
-def initialize():
+def initialize(datasets=['princeton', 'labeled']):
     """
     Reads the shapes, creates a feature dataset,
     and returns the feature datasets, paths for all shapes,
@@ -42,9 +43,9 @@ def initialize():
     f = {}
     p = {}
     n = {}
-    for dataset in ('princeton', 'labeled'):
+    for dataset in datasets:
         features, paths = read_dataset(dataset=dataset,
-                                       n_meshes=10, features=True)
+                                       n_meshes=None, features=True)
         norm_infos = {}
 
         for name, series in features.iteritems():
