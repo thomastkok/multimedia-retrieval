@@ -18,6 +18,11 @@ def create_interface(features, paths, norm_info):
         [sg.Text('Select your dataset'),
          sg.InputCombo(('Labeled', 'Princeton'), size=(20, 1),
                        key='dataset')],
+        [sg.Text('Select your query method:'),
+         sg.Radio('By id', group_id="RADIO0", enable_events=True,
+                  key='by_id', default=True),
+         sg.Radio('By mesh', group_id="RADIO0", enable_events=True,
+                  key='by_mesh')],
         [sg.Text('Input the id of your query shape:'),
          sg.Input(key='query_id')],
         [sg.Text('Select your query shape:'), sg.Input(key='query_shape'),
@@ -42,10 +47,12 @@ def create_interface(features, paths, norm_info):
             break
         elif event in ('Ok'):
             dataset = values['dataset'].lower()
-            if values['query_id'] and not values['query_id'].isdigit():
-                sg.PopupError(f'Query ID must be a digit, not {values["query_id"]}') 
+            if values['by_id'] and (not values['query_id'].isdigit() or not
+                                    (0 < int(values['query_id']) <= 380)):
+                sg.PopupError(f'Query ID must be a digit between 1 and 380, \
+                                not {values["query_id"]}')
             if dataset in features.keys():
-                mesh = values['query_id'] or values['query_shape']
+                mesh = values['query_id'] if values['by_id'] else values['query_shape']
 
                 if values['regular']:
                     shapes = query_shape(
