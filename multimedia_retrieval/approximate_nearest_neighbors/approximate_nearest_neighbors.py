@@ -1,6 +1,4 @@
 from annoy import AnnoyIndex
-from nearpy import Engine
-from nearpy.hashes import RandomBinaryProjections
 
 from multimedia_retrieval.datasets.datasets import read_dataset, read_mesh
 from multimedia_retrieval.matching.matching import compute_mesh_features
@@ -65,20 +63,3 @@ def approximate_nn(query_mesh_path, feature_db, number_trees, search_k, top_k, n
     shapes = pd.Series(results).sort_values()
 
     return shapes
-
-
-def approximate_nearpy(feature_db):
-    dimension = 10
-    # rbp = RandomBinaryProjections('rbp', 10)
-    # engine = Engine(dimension, lshashes=[rbp], distance=CustomCompare())
-
-    # last_row = None
-
-    # for data_point, dp_features in feature_db.iterrows():
-    #     last_row = dp_features
-    #     engine.store_vector(dp_features, f'data {data_point}')
-
-    # print(last_row)
-    # query = last_row
-    # N = engine.neighbours(query)
-    # print(N)
