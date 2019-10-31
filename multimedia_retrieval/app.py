@@ -24,10 +24,10 @@ def run():
     cache = input('Read from cache (yes/no)?\n')
     if cache.lower().startswith('y'):
         features, paths, norm_info = read_cache()
-        approximate_nearpy(features['labeled'])
         print('Read from cache.')
     else:
         features, paths, norm_info = initialize()
+        print(paths)
         cache = input('Write to cache (yes/no)?\n')
         if cache.lower().startswith('y'):
             write_cache(features, paths, norm_info)

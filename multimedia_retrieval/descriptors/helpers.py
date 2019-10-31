@@ -7,6 +7,7 @@ import trimesh
 import sys
 
 
+# TODO: misschien andere max en min conform de beschrijving van de assignment (dus extra sqrt en cube root)
 def get_hist_ranges():
     return {
         'A3': (0, 180),

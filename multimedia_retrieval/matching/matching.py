@@ -9,19 +9,26 @@ from multimedia_retrieval.normalization.normalization import (
 from .distances import compare
 
 
+def compute_mesh_features(mesh_path, norm_info):
+    """
+    Given the file path of a mesh, computes it's normalized features.
+    """
+    mesh = read_mesh(mesh_path)
+    mesh_normalization(mesh)
+    global_features = compute_global_descriptors(mesh)
+    local_features = compute_local_descriptors(mesh, 100, 10)
+
+    return normalize_to(pd.concat([global_features, local_features]),
+                        norm_info)
+
+
 def query_shape(mesh_path, dataset_features, norm_info):
     """
     Given the file path to a local mesh, the features of the dataset,
     and the necessary information needed to normalize the query mesh,
     returns the closes matching shapes from the dataset.
     """
-    mesh = read_mesh(mesh_path)
-    mesh_normalization(mesh)
-    global_features = compute_global_descriptors(mesh)
-    local_features = compute_local_descriptors(mesh, 100, 10)
-    mesh_features = normalize_to(pd.concat([global_features, local_features]),
-                                 norm_info)
-
+    mesh_features = compute_mesh_features(mesh_path, norm_info)
     shapes = match_shapes(mesh_features, dataset_features, k=3)
     return shapes
 
