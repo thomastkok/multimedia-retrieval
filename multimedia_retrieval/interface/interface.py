@@ -52,7 +52,8 @@ def create_interface(features, paths, norm_info):
                 sg.PopupError(f'Query ID must be a digit between 1 and 380, \
                                 not {values["query_id"]}')
             if dataset in features.keys():
-                mesh = values['query_id'] if values['by_id'] else values['query_shape']
+                mesh = values['query_id'] if values['by_id'] \
+                                          else values['query_shape']
 
                 if values['regular']:
                     shapes = query_shape(
