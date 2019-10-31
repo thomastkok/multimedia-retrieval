@@ -26,7 +26,7 @@ def earth_movers(one, two):
     if len(one) != len(two):
         raise ValueError('Length of both features must be the same')
     if (sum(one) < 0.99 or sum(one) > 1.01 or
-            sum(two) < 0.99 or sum(two) > 1.01):
+        sum(two) < 0.99 or sum(two) > 1.01):
         raise ValueError('Sum of all feature values must be 1')
     return wasserstein_distance(one, two)
 
@@ -49,8 +49,3 @@ def compare(one, two):
         else:
             distances.append(abs(one[i] - two[i]))
     return np.linalg.norm(distances)
-
-
-class CustomCompare():
-    def distance(self, one, two):
-        compare(one, two)
