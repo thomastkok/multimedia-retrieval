@@ -3,7 +3,7 @@ from annoy import AnnoyIndex
 from multimedia_retrieval.datasets.datasets import read_dataset, read_mesh
 from multimedia_retrieval.matching.matching import compute_mesh_features
 
-from ..matching.distances import compare, CustomCompare
+from ..matching.distances import compare
 
 import random
 import numpy as np
