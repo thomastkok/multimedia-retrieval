@@ -32,19 +32,25 @@ def create_interface(features, paths, norm_info):
             break
         elif event in ('Ok'):
             dataset = values[0].lower()
-            mesh = values[1]
+            if dataset in features.keys():
+                mesh = values[1]
 
-            if window.element('regular').Get():
-                shapes = query_shape(
-                    mesh, features[dataset], norm_info[dataset])
+                if window.element('regular').Get():
+                    shapes = query_shape(
+                        mesh, features[dataset], norm_info[dataset])
 
-            elif window.element('ann').Get():
-                shapes = approximate_nn(mesh, features[dataset], 100, 5, 10, norm_info[dataset])
+                elif window.element('ann').Get():
+                    shapes = approximate_nn(
+                        mesh, features[dataset], 100, 5, 10, norm_info[dataset])
 
-            for shape, dist in shapes.iteritems():
-                answer = sg.PopupYesNo(f'Shape {shape} has distance {dist}.'
-                                       'Do you want to view the shape?')
-                if answer == 'Yes':
-                    draw_mesh(read_mesh(paths[dataset][shape]))
+                for shape, dist in shapes.iteritems():
+                    answer = sg.PopupYesNo(
+                        f'Shape {shape} has distance {dist}.'
+                        'Do you want to view the shape?'
+                    )
+                    if answer == 'Yes':
+                        draw_mesh(read_mesh(paths[dataset][shape]))
+            else:
+                sg.PopupError(f'Dataset {dataset} is not loaded.')
 
     window.close()

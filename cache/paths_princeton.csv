@@ -1,11 +1,3 @@
 mesh,paths
 0,../benchmark/db\0\m0/m0.off
-181,../benchmark/db\1\m181/m181.off
-1162,../benchmark/db\11\m1162/m1162.off
-1343,../benchmark/db\13\m1343/m1343.off
-1524,../benchmark/db\15\m1524/m1524.off
-1705,../benchmark/db\17\m1705/m1705.off
-271,../benchmark/db\2\m271/m271.off
-452,../benchmark/db\4\m452/m452.off
-633,../benchmark/db\6\m633/m633.off
-815,../benchmark/db\8\m815/m815.off
+474,../benchmark/db\4\m474/m474.off
