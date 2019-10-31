@@ -58,7 +58,7 @@ def approximate_nn(query_mesh_path, feature_db, number_trees, search_k, top_k, n
     results = {}
 
     for id, dist in list(zip(shapes[0], shapes[1])):
-        results[id] = dist 
+        results[id] = dist
 
     shapes = pd.Series(results).sort_values()
 
