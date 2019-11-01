@@ -48,8 +48,8 @@ def create_interface(features, paths, norm_info):
         elif event in ('Ok'):
             dataset = values['dataset'].lower()
             if values['by_id'] and (not values['query_id'].isdigit() or not
-                                    (0 < int(values['query_id']) <= 380)):
-                sg.PopupError(f'Query ID must be a digit between 1 and 380, \
+                                    (0 < int(values['query_id']) <= 400)):
+                sg.PopupError(f'Query ID must be a digit between 1 and 400, \
                                 not {values["query_id"]}')
             if dataset in features.keys():
                 mesh = values['query_id'] if values['by_id'] \

@@ -31,7 +31,9 @@ def run():
             write_cache(features, paths, norm_info, datasets)
             print('Wrote to cache.')
 
-    # evaluate(features, paths, norm_info)
+    eval = input('Do you want to evaluate the querying (yes/no)?\n')
+    if eval.lower().startswith('y'):
+        evaluate(features, paths, norm_info)
     create_interface(features, paths, norm_info)
 
 
