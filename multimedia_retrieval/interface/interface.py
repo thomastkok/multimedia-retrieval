@@ -59,12 +59,10 @@ def create_interface(features, paths, norm_info):
                                           else values['query_shape']
 
                 if values['regular']:
-                    print('reg')
                     shapes = query_shape(
                         mesh, features[dataset], norm_info[dataset],
                         k=int(values['k']))
                 elif values['ann']:
-                    print('ann')
                     shapes = approximate_nn(
                         mesh, features[dataset], 1000, 100,
                         int(values['k']), norm_info[dataset])
