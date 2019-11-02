@@ -4,7 +4,7 @@ import numpy as np
 
 from math import pi
 
-from multimedia_retrieval.mesh_conversion.helpers import mesh_to_trimesh
+from multimedia_retrieval.mesh_conversion.helpers import mesh_to_trimesh, trimesh_to_mesh
 
 
 def translate_to_origin(mesh):
@@ -92,12 +92,12 @@ def flip_mesh(mesh):
         for i, c in enumerate(center):
             mass[i] += np.sign(c) * (c * c)
     flip = np.asarray(
-        [[1.0, 0.0, 0.0, 0.0],
-         [0.0, 1.0, 0.0, 0.0],
-         [0.0, 0.0, 1.0, 0.0],
-         [0.0, 0.0, 0.0, 1.0]]
+        [[1, 0, 0, 0],
+         [0, 1, 0, 0],
+         [0, 0, 1, 0],
+         [0, 0, 0, 1]]
     )
     for i, c in enumerate(mass):
         if c > 0:
             flip[i, i] = -1
-    mesh.transform(flip)
+    return trimesh_to_mesh(mesh_to_trimesh(mesh).apply_transform(flip))

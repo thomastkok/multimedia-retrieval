@@ -16,7 +16,7 @@ def mesh_normalization(meshes):
     for mesh in meshes:
         translate_to_origin(mesh)
         align_to_eigenvectors(mesh)
-        flip_mesh(mesh)
+        mesh = flip_mesh(mesh)
         scale_to_unit(mesh)
 
 

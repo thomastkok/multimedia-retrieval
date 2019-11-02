@@ -25,6 +25,7 @@ def run():
         features, paths, norm_info = read_cache(datasets)
         print('Read from cache.')
     else:
+        print('Calculating feature values.')
         features, paths, norm_info = initialize(datasets)
         cache = input('Write to cache (yes/no)?\n')
         if cache.lower().startswith('y'):
