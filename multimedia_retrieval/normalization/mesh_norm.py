@@ -91,9 +91,13 @@ def flip_mesh(mesh):
         center = center / 3
         for i, c in enumerate(center):
             mass[i] += np.sign(c) * (c * c)
-    flip = [1, 1, 1]
+    flip = np.asarray(
+        [[1.0, 0.0, 0.0, 0.0],
+         [0.0, 1.0, 0.0, 0.0],
+         [0.0, 0.0, 1.0, 0.0],
+         [0.0, 0.0, 0.0, 1.0]]
+    )
     for i, c in enumerate(mass):
         if c > 0:
-            flip[i] = -1
-    for v in mesh.vertices:
-        v = v * flip
+            flip[i, i] = -1
+    mesh.transform(flip)
