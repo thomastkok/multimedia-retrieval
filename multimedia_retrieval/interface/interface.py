@@ -3,6 +3,7 @@ import PySimpleGUI as sg
 from multimedia_retrieval.matching.matching import query_shape
 from multimedia_retrieval.visualization.visualization import draw_mesh
 from multimedia_retrieval.datasets.datasets import read_mesh
+from multimedia_retrieval.dr.dr import dimensionality_reduction
 from multimedia_retrieval.ann.ann import approximate_nn
 
 
@@ -31,19 +32,21 @@ def create_interface(features, paths, norm_info):
          sg.Radio('Regular', group_id="RADIO1", enable_events=True,
                   key='regular', default=True),
          sg.Radio('Ann', enable_events=True, group_id="RADIO1", key='ann')],
+        [sg.Button('Show T-SNE', key='tsne')],
         [sg.Text('Input k (the number of returned shapes):'),
          sg.Slider(range=(1, 20), orientation='horizontal',
                    default_value=3, key='k')],
-        [sg.Button('Ok'), sg.Button('Cancel')]
+        [sg.Ok(), sg.Cancel()]
     ]
 
     window = sg.Window('3D Shape Retrieval', layout)
 
     while True:
-        print(f'Values found in window are {window.read()}')
         event, values = window.read()
 
-        if event in (None, 'Cancel'):
+        if event in ('tsne'):
+            dimensionality_reduction(features['labeled'])
+        elif event in (None, 'Cancel'):
             break
         elif event in ('Ok'):
             dataset = values['dataset'].lower()
@@ -61,7 +64,7 @@ def create_interface(features, paths, norm_info):
                         k=int(values['k']))
                 elif values['ann']:
                     shapes = approximate_nn(
-                        mesh, features[dataset], 100, 5,
+                        mesh, features[dataset], 1000, 100,
                         int(values['k']), norm_info[dataset])
 
                 for shape, dist in shapes.iteritems():
