@@ -22,13 +22,16 @@ def compute_mesh_features(mesh_path, norm_info):
                         norm_info)
 
 
-def query_shape(mesh_path, dataset_features, norm_info, k=3):
+def query_shape(mesh, dataset_features, norm_info, k=3):
     """
     Given the file path to a local mesh, the features of the dataset,
     and the necessary information needed to normalize the query mesh,
     returns the closes matching shapes from the dataset.
     """
-    mesh_features = compute_mesh_features(mesh_path, norm_info)
+    if not mesh.isdigit():
+        mesh_features = compute_mesh_features(mesh, norm_info)
+    else:
+        mesh_features = dataset_features.loc[int(mesh), :]
     shapes = match_shapes(mesh_features, dataset_features, k=k)
     return shapes
 

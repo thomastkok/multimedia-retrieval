@@ -19,9 +19,6 @@ from .visualization.visualization import draw_mesh, draw_meshes
 from .histograms.histograms import plot_histogram
 from .evaluation.evaluation import evaluate
 
-from .approximate_nearest_neighbors.approximate_nearest_neighbors import \
-    approximate_nn
-
 
 def run():
     datasets = ['labeled']
@@ -36,7 +33,9 @@ def run():
             write_cache(features, paths, norm_info, datasets)
             print('Wrote to cache.')
 
-    # evaluate(features, paths, norm_info)
+    eval = input('Do you want to evaluate the querying (yes/no)?\n')
+    if eval.lower().startswith('y'):
+        evaluate(features, paths, norm_info)
     create_interface(features, paths, norm_info)
 
 
