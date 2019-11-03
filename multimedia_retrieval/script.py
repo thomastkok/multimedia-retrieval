@@ -12,7 +12,7 @@ import open3d
 import matplotlib.pyplot as plt
 import numpy as np
 
-query_mesh = "/home/ruben/Desktop/LabeledDB_new/Armadillo/287.off"
+query_mesh = "/home/ruben/Desktop/LabeledDB_new/Plier/207.off"
 features, paths, norm_info = read_cache()
 
 top_ks = [10, 100]
@@ -34,7 +34,7 @@ handles, labs = [], []
 for midx, metric in enumerate(metrics):
     for idx, top_k in enumerate(top_ks):
         shapes_ann = approximate_nn(
-            query_mesh, features['labeled'], 1000, 10000, top_k, norm_info['labeled'], metric)
+            query_mesh, features['labeled'], 10000, 100000, top_k, norm_info['labeled'], metric)
         x, y = [], []
         for shape, dist in shapes_ann.iteritems():
             x.append(dist)
@@ -52,10 +52,10 @@ for handle, label in zip(handles, labs):
         label_list.append(label)
 
 
-fig.legend(handles=handle_list, labels=label_list, loc='upper right')
+fig.legend(handles=handle_list, labels=label_list, loc='lower center')
 
 plt.suptitle(f'Comparison of top-10 and top-100 between ANN metrics')
-fig.text(0.5, 0.04, 'Distances', ha='center', va='center')
+fig.text(0.5, 0.90, 'Distances', ha='center', va='center')
 fig.text(0.06, 0.5, 'Classes', ha='center', va='center', rotation='vertical')
 
 plt.show()
