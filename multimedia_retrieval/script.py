@@ -1,22 +1,61 @@
 from multimedia_retrieval.datasets.datasets import read_mesh
 from multimedia_retrieval.visualization.visualization import draw_mesh
-from multimedia_retrieval.normalization.mesh_norm import (
-    translate_to_origin, align_to_eigenvectors,
-    flip_mesh, scale_to_unit
-)
+
+from multimedia_retrieval.matching.matching import query_shape
+from multimedia_retrieval.ann.ann import approximate_nn
+
+
+from multimedia_retrieval.datasets.datasets import read_cache
+from multimedia_retrieval.evaluation.evaluation import get_labels
+
 import open3d
+import matplotlib.pyplot as plt
+import numpy as np
 
-mesh = read_mesh('C:\\Users\\Thomas\\Documents\\mr\\LabeledDB_new\\Human\\2.off')
-mesh.translate((-1, 0.2, 0.45))
-mesh.scale(1.3)
-mesh.rotate((260, 215, 188), type=open3d.geometry.RotationType.AxisAngle)
+query_mesh = "/home/ruben/Desktop/LabeledDB_new/Armadillo/287.off"
+features, paths, norm_info = read_cache()
 
-draw_mesh(mesh, draw_coordinate_frame=True)
-translate_to_origin(mesh)
-draw_mesh(mesh, draw_coordinate_frame=True)
-align_to_eigenvectors(mesh)
-draw_mesh(mesh, draw_coordinate_frame=True)
-flip_mesh(mesh)
-draw_mesh(mesh, draw_coordinate_frame=True)
-scale_to_unit(mesh)
-draw_mesh(mesh, draw_coordinate_frame=True)
+top_ks = [10, 100]
+labels = get_labels()
+metrics = ['euclidean', 'angular', 'manhattan', 'dot']
+colors = ['k', 'r', 'g', 'b']
+
+
+cmap = plt.cm.jet
+
+# shapes_regular = query_shape(
+#     query_mesh, features['labeled'], norm_info['labeled'], top_k)
+
+fig, axs = plt.subplots(nrows=4, ncols=2)
+
+handles, labs = [], []
+
+
+for midx, metric in enumerate(metrics):
+    for idx, top_k in enumerate(top_ks):
+        shapes_ann = approximate_nn(
+            query_mesh, features['labeled'], 1000, 10000, top_k, norm_info['labeled'], metric)
+        x, y = [], []
+        for shape, dist in shapes_ann.iteritems():
+            x.append(dist)
+            y.append(labels[f'{shape}'])
+
+        handle, = axs[midx, idx].plot(x, y, "o-", c=colors[midx], alpha=0.6, label=metric)
+        handles.append(handle)
+        labs.append(metric)
+
+
+handle_list, label_list = [], []
+for handle, label in zip(handles, labs):
+    if label not in label_list:
+        handle_list.append(handle)
+        label_list.append(label)
+
+
+fig.legend(handles=handle_list, labels=label_list, loc='upper right')
+
+plt.suptitle(f'Comparison of top-10 and top-100 between ANN metrics')
+fig.text(0.5, 0.04, 'Distances', ha='center', va='center')
+fig.text(0.06, 0.5, 'Classes', ha='center', va='center', rotation='vertical')
+
+plt.show()

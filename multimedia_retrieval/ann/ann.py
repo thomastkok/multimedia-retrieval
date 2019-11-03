@@ -22,7 +22,7 @@ import pandas as pd
 
 
 def approximate_nn(query_mesh, feature_db, number_trees,
-                   search_k, top_k, norm_info):
+                   search_k, top_k, norm_info, metric):
     if not query_mesh.isdigit():
         query_mesh_features = compute_mesh_features(query_mesh, norm_info)
     else:
@@ -39,7 +39,7 @@ def approximate_nn(query_mesh, feature_db, number_trees,
             query_vector.append(feat)
 
     n_rows, n_cols = feature_db.shape
-    ann = AnnoyIndex(55, 'euclidean')
+    ann = AnnoyIndex(55, metric)
 
     ann.add_item(0, query_vector)
 
@@ -60,6 +60,8 @@ def approximate_nn(query_mesh, feature_db, number_trees,
 
     shapes = ann.get_nns_by_item(
         0, top_k + 1, search_k=search_k, include_distances=True)
+
+    print(len(shapes[0]))
 
     results = {}
 
