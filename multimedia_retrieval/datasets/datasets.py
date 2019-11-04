@@ -7,7 +7,7 @@ import trimesh
 
 from multimedia_retrieval.descriptors.descriptors import (
     compute_global_descriptors, compute_local_descriptors)
-from multimedia_retrieval.normalization.normalization import mesh_normalization
+from multimedia_retrieval.normalization.normalization import mesh_norm
 from .helpers import hist_convert
 from multimedia_retrieval.mesh_conversion.helpers import mesh_to_trimesh
 
@@ -85,7 +85,7 @@ def read_dataset(dataset, file_path=None, n_meshes=None, features=False):
                     mesh = read_mesh(root + '/' + file)
                     index = file.split('.', 1)[0].replace('m', '')
                     if features:
-                        mesh_normalization(mesh)
+                        mesh_norm(mesh)
                         meshes[index] = pd.concat([
                             compute_global_descriptors(mesh),
                             compute_local_descriptors(mesh,

@@ -4,7 +4,7 @@ from multimedia_retrieval.datasets.datasets import read_dataset, read_mesh
 from multimedia_retrieval.descriptors.descriptors import (
     compute_global_descriptors, compute_local_descriptors)
 from multimedia_retrieval.normalization.normalization import (
-    feature_normalization, mesh_normalization, normalize_to)
+    feature_normalization, mesh_norm, normalize_to)
 
 from .distances import compare
 
@@ -14,7 +14,7 @@ def compute_mesh_features(mesh_path, norm_info):
     Given the file path of a mesh, computes it's normalized features.
     """
     mesh = read_mesh(mesh_path)
-    mesh_normalization(mesh)
+    mesh_norm(mesh)
     global_features = compute_global_descriptors(mesh)
     local_features = compute_local_descriptors(mesh, 100, 10)
 
