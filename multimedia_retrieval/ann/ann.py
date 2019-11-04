@@ -22,7 +22,7 @@ import pandas as pd
 
 
 def approximate_nn(query_mesh, feature_db, number_trees,
-                   search_k, top_k, norm_info, metric):
+                   search_k, top_k, norm_info, metric='angular'):
     if not query_mesh.isdigit():
         query_mesh_features = compute_mesh_features(query_mesh, norm_info)
     else:
@@ -60,8 +60,6 @@ def approximate_nn(query_mesh, feature_db, number_trees,
 
     shapes = ann.get_nns_by_item(
         0, top_k + 1, search_k=search_k, include_distances=True)
-
-    print(len(shapes[0]))
 
     results = {}
 
