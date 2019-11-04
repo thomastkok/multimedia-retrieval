@@ -4,7 +4,10 @@ import numpy as np
 import pandas as pd
 from sklearn import metrics, preprocessing
 from multimedia_retrieval.matching.matching import query_shape
-from multimedia_retrieval.matching.distances import compare
+from multimedia_retrieval.matching.distances import (
+    compare, avg_cos, avg_eucl, flat_cos, flat_eucl
+)
+from multimedia_retrieval.normalization.feat_norm import rescale
 
 
 def get_labels():
@@ -40,26 +43,12 @@ def plot_roc_curve(labels, distances, true_label):
     plt.show()
 
 
-def print_auc(classes, features, paths, norm_info):
+def print_auc(classes, dist_df, features, paths, norm_info):
     auc_scores = {}
     for k in set(classes):
         auc_scores[k] = []
 
     labels = get_labels()
-
-    dist_df = pd.DataFrame(np.zeros(shape=(380, 380)), columns=features.index)
-    dist_df.index = features.index
-
-    print('Creating distance matrix.')
-
-    for i in features.index:
-        for j in features.index:
-            if i < j:
-                dist = compare(features.loc[i, :], features.loc[j, :])
-                dist_df.loc[i, j] = dist
-                dist_df.loc[j, i] = dist
-
-    print('Distance matrix created.')
 
     for mesh in features.index:
         shapes = dist_df.loc[mesh, :].sort_values()
@@ -70,5 +59,8 @@ def print_auc(classes, features, paths, norm_info):
         )
         auc_scores[labels[str(mesh)]].append(metrics.auc(fpr, tpr))
 
+    avgs = []
     for k in auc_scores.keys():
         print(f'The average for {k} is {np.mean(auc_scores[k])}')
+        avgs.append(np.mean(auc_scores[k]))
+    print(f'The average for all classes is {np.mean(avgs)}')

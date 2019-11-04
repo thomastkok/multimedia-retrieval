@@ -15,7 +15,7 @@ from .normalization.normalization import (feature_normalization,
 from .visualization.visualization import draw_mesh, draw_meshes
 
 from .histograms.histograms import plot_histogram
-from .evaluation.evaluation import evaluate
+from .evaluation.evaluation import evaluate, plot_conf_matrix, get_dist_mat
 
 
 def run():
@@ -34,7 +34,10 @@ def run():
 
     eval = input('Do you want to evaluate the querying (yes/no)?\n')
     if eval.lower().startswith('y'):
-        evaluate(features, paths, norm_info)
+        cache = input('Read distance matrix from cache (yes/no)?\n')
+        distance_matrix = get_dist_mat(features['labeled'], cache.lower().startswith('y'))
+        plot_conf_matrix(features, distance_matrix)
+        evaluate(features, paths, norm_info, distance_matrix)
     create_interface(features, paths, norm_info)
 
 
