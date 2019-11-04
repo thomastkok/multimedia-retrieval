@@ -4,20 +4,25 @@ from .feat_norm import (normalize_histogram, normalize_histograms,
 from .mesh_norm import (align_to_eigenvectors, flip_mesh, scale_to_unit,
                         translate_to_origin)
 import pandas as pd
+import numpy as np
 
 from multimedia_retrieval.visualization.visualization import (draw_mesh,
                                                               draw_meshes)
+
+
+def mesh_norm(mesh):
+    new_mesh = translate_to_origin(mesh)
+    new_mesh = align_to_eigenvectors(new_mesh)
+    new_mesh = flip_mesh(new_mesh)
+    new_mesh = scale_to_unit(mesh)
+    return new_mesh
 
 
 def mesh_normalization(meshes):
     """Normalizes all given meshes."""
     if not hasattr(meshes, '__iter__'):
         meshes = [meshes]
-    for mesh in meshes:
-        translate_to_origin(mesh)
-        align_to_eigenvectors(mesh)
-        mesh = flip_mesh(mesh)
-        scale_to_unit(mesh)
+    meshes[:] = [mesh_norm(mesh) for mesh in meshes]
 
 
 def feature_normalization(feature):

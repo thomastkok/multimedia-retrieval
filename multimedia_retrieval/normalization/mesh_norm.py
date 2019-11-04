@@ -13,6 +13,7 @@ def translate_to_origin(mesh):
     such that its centroid coincides with the coordinate-frame origin.
     """
     mesh.translate(-mesh.get_center())
+    return mesh
 
 
 def scale_to_unit(mesh):
@@ -29,6 +30,7 @@ def scale_to_unit(mesh):
         )
     factor = 1 / max(mesh.get_max_bound() - mesh.get_min_bound())
     mesh.scale(factor, center=True)
+    return mesh
 
 
 def compute_angle(v1, v2):
@@ -56,6 +58,7 @@ def align_eigen_to_axis(mesh, axs, ev):
     angle = compute_angle(ev, axs)
     axis_angle = angle * unit_rot_axis
     mesh.rotate(axis_angle, type=open3d.geometry.RotationType.AxisAngle)
+    return mesh
 
 
 def align_to_eigenvectors(mesh):
@@ -75,6 +78,7 @@ def align_to_eigenvectors(mesh):
     eigenvectors = np.linalg.eigh(np.cov(vertices, rowvar=False))[1]
 
     align_eigen_to_axis(mesh, y, eigenvectors[:, 1])
+    return mesh
 
 
 def flip_mesh(mesh):
