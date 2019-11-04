@@ -65,7 +65,7 @@ def create_interface(features, paths, norm_info):
                 elif values['ann']:
                     shapes = approximate_nn(
                         mesh, features[dataset], 1000, 100,
-                        int(values['k']), norm_info[dataset])
+                        int(values['k']), norm_info[dataset], "angular")
 
                 for shape, dist in shapes.iteritems():
                     answer = sg.PopupYesNo(

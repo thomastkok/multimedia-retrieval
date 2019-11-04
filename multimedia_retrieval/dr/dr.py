@@ -10,7 +10,7 @@ def dimensionality_reduction(feature_db):
 
     features, labels, mesh_ids, unique_labels = unpack_feature_db(feature_db)
 
-    tsne = manifold.TSNE()
+    tsne = manifold.TSNE(init="pca", perplexity=19, learning_rate=200)
     feature_tsne = tsne.fit_transform(features)
 
     plot_embedding(feature_tsne, labels, mesh_ids, len(unique_labels))
