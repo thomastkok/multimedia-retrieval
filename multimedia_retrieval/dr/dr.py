@@ -1,6 +1,6 @@
 from sklearn import manifold
 
-from .helpers import unpack_feature_db, plot_embedding
+from .helpers import plot_embedding, unpack_feature_db
 
 
 def dimensionality_reduction(feature_db):

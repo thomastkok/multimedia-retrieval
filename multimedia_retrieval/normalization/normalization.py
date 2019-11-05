@@ -1,16 +1,13 @@
-from .feat_norm import (normalize_histogram, normalize_histograms,
-                        rescale, rescale_to, standardize,
-                        standardize_to)
+import pandas as pd
+
+from .feat_norm import (
+    normalize_histogram, normalize_histograms, standardize, standardize_to)
 from .mesh_norm import (align_to_eigenvectors, flip_mesh, scale_to_unit,
                         translate_to_origin)
-import pandas as pd
-import numpy as np
-
-from multimedia_retrieval.visualization.visualization import (draw_mesh,
-                                                              draw_meshes)
 
 
 def mesh_norm(mesh):
+    """Normalizes a single mesh."""
     new_mesh = translate_to_origin(mesh)
     new_mesh = align_to_eigenvectors(new_mesh)
     new_mesh = flip_mesh(new_mesh)
@@ -35,6 +32,7 @@ def feature_normalization(feature):
 
 
 def features_normalization(features):
+    """Normalizes all given features."""
     for feature in features:
         feature = feature_normalization(feature)
     return features

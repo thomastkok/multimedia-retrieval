@@ -1,10 +1,8 @@
-import numpy as np
-import sys
-import os
-import open3d
-import trimesh
-import statistics
 import csv
+import os
+import statistics
+
+import numpy as np
 
 
 def get_classes(file_path, dataset):
@@ -39,8 +37,9 @@ def get_classes(file_path, dataset):
 
 def output_filter(output_file, mesh_properties, mesh_stats):
     """
-    Outputs the filter in the form a csv file with each property computed for each mesh.
-    """  
+    Outputs the filter in the form a csv file,
+    with each property computed for each mesh.
+    """
     if output_file and not output_file.endswith('.csv'):
         raise ValueError(f'Output file ({output_file}) should end with .csv')
     elif output_file:

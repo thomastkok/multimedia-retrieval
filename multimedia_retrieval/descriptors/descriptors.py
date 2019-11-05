@@ -1,26 +1,12 @@
-import sys
 import numpy as np
-
-from .helpers import (compute_angles, compute_compactness,
-                      compute_diameter, compute_eccentricity,
-                      compute_dists, get_eigen,
-                      compute_triangle_areas,
-                      compute_tetrahedron_volumes,
-                      get_hist_ranges)
-
-import numpy as np
-import open3d
 import pandas as pd
-import trimesh
 
-from multimedia_retrieval.histograms.histograms import plot_histogram
-from multimedia_retrieval.mesh_conversion.helpers import (mesh_to_trimesh,
-                                                          trimesh_to_mesh)
+from multimedia_retrieval.mesh_conversion.helpers import mesh_to_trimesh
 
 from .helpers import (compute_angles, compute_compactness, compute_diameter,
                       compute_dists, compute_eccentricity,
                       compute_tetrahedron_volumes, compute_triangle_areas,
-                      get_eigen)
+                      get_hist_ranges)
 
 
 def compute_global_descriptors(mesh):

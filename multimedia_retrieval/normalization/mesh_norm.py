@@ -1,10 +1,8 @@
-import open3d
-import trimesh
 import numpy as np
+import open3d
 
-from math import pi
-
-from multimedia_retrieval.mesh_conversion.helpers import mesh_to_trimesh, trimesh_to_mesh
+from multimedia_retrieval.mesh_conversion.helpers import (mesh_to_trimesh,
+                                                          trimesh_to_mesh)
 
 
 def translate_to_origin(mesh):

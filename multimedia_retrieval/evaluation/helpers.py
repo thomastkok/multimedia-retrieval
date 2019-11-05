@@ -1,13 +1,8 @@
 import os
+
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-from sklearn import metrics, preprocessing
-from multimedia_retrieval.matching.matching import query_shape
-from multimedia_retrieval.matching.distances import (
-    compare, avg_cos, avg_eucl, flat_cos, flat_eucl
-)
-from multimedia_retrieval.normalization.feat_norm import rescale
+from sklearn import metrics
 
 
 def get_labels():
@@ -26,6 +21,7 @@ def get_labels():
 
 
 def plot_roc_curve(labels, distances, true_label):
+    """Plots an ROC curve."""
     fpr, tpr, thresholds = metrics.roc_curve(labels, distances, true_label)
     roc_auc = metrics.auc(fpr, tpr)
 
@@ -44,6 +40,7 @@ def plot_roc_curve(labels, distances, true_label):
 
 
 def print_auc(classes, dist_df, features, paths, norm_info):
+    """Prints the AUC scores for all classes."""
     auc_scores = {}
     for k in set(classes):
         auc_scores[k] = []

@@ -1,21 +1,10 @@
-import open3d
-import pandas as pd
 import numpy as np
+import pandas as pd
 
-from .datasets.datasets import (read_dataset, read_mesh,
-                                read_cache, write_cache,
-                                remove_flawed_meshes)
-from .descriptors.descriptors import (compute_global_descriptors,
-                                      compute_local_descriptors)
-
-from .filter.filter import filter_meshes, refine_outlier
+from .datasets.datasets import read_cache, read_dataset, write_cache
+from .evaluation.evaluation import evaluate, get_dist_mat, plot_conf_matrix
 from .interface.interface import create_interface
-from .normalization.normalization import (feature_normalization,
-                                          mesh_normalization)
-from .visualization.visualization import draw_mesh, draw_meshes
-
-from .histograms.histograms import plot_histogram
-from .evaluation.evaluation import evaluate, plot_conf_matrix, get_dist_mat
+from .normalization.normalization import feature_normalization
 
 
 def run():
@@ -35,7 +24,8 @@ def run():
     eval = input('Do you want to evaluate the querying (yes/no)?\n')
     if eval.lower().startswith('y'):
         cache = input('Read distance matrix from cache (yes/no)?\n')
-        distance_matrix = get_dist_mat(features['labeled'], cache.lower().startswith('y'))
+        c = cache.lower().startswith('yes')
+        distance_matrix = get_dist_mat(features['labeled'], c)
         plot_conf_matrix(features, distance_matrix)
         evaluate(features, paths, norm_info, distance_matrix)
     create_interface(features, paths, norm_info)

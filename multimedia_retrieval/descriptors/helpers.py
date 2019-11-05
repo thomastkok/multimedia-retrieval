@@ -1,14 +1,13 @@
 import random
+import sys
 from math import pi, sqrt
 
 import numpy as np
-import open3d
 import trimesh
-import sys
 
 
-# TODO: misschien andere max en min conform de beschrijving van de assignment (dus extra sqrt en cube root)
 def get_hist_ranges():
+    """Returns the histogram ranges for the local descriptors."""
     return {
         'A3': (0, 180),
         'D1': (0, sqrt(3)),

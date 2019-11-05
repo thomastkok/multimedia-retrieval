@@ -1,10 +1,10 @@
 import PySimpleGUI as sg
 
-from multimedia_retrieval.matching.matching import query_shape
-from multimedia_retrieval.visualization.visualization import draw_mesh
+from multimedia_retrieval.ann.ann import approximate_nn
 from multimedia_retrieval.datasets.datasets import read_mesh
 from multimedia_retrieval.dr.dr import dimensionality_reduction
-from multimedia_retrieval.ann.ann import approximate_nn
+from multimedia_retrieval.matching.matching import query_shape
+from multimedia_retrieval.visualization.visualization import draw_mesh
 
 
 def create_interface(features, paths, norm_info):
@@ -19,6 +19,7 @@ def create_interface(features, paths, norm_info):
         [sg.Text('Select your dataset'),
          sg.InputCombo(('Labeled', 'Princeton'), size=(20, 1),
                        key='dataset')],
+        [sg.Button('Show T-SNE', key='tsne')],
         [sg.Text('Select your query method:'),
          sg.Radio('By id', group_id="RADIO0", enable_events=True,
                   key='by_id', default=True),
@@ -32,7 +33,6 @@ def create_interface(features, paths, norm_info):
          sg.Radio('Regular', group_id="RADIO1", enable_events=True,
                   key='regular', default=True),
          sg.Radio('Ann', enable_events=True, group_id="RADIO1", key='ann')],
-        [sg.Button('Show T-SNE', key='tsne')],
         [sg.Text('Input k (the number of returned shapes):'),
          sg.Slider(range=(1, 20), orientation='horizontal',
                    default_value=3, key='k')],

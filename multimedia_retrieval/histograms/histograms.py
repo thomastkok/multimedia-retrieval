@@ -1,12 +1,6 @@
-import numpy as np
 import matplotlib.pyplot as plt
-import math
-import csv
 
 from multimedia_retrieval.descriptors.helpers import get_hist_ranges
-
-#  Perhaps useful to look at bin sizes.
-#  https://www.statisticshowto.datasciencecentral.com/choose-bin-sizes-statistics/
 
 
 def plot_histogram(title, nr_bins, n_rows_cols=None, **kwargs):

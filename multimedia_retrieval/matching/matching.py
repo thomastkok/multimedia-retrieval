@@ -1,10 +1,10 @@
 import pandas as pd
 
-from multimedia_retrieval.datasets.datasets import read_dataset, read_mesh
+from multimedia_retrieval.datasets.datasets import read_mesh
 from multimedia_retrieval.descriptors.descriptors import (
     compute_global_descriptors, compute_local_descriptors)
-from multimedia_retrieval.normalization.normalization import (
-    feature_normalization, mesh_norm, normalize_to)
+from multimedia_retrieval.normalization.normalization import (mesh_norm,
+                                                              normalize_to)
 
 from .distances import compare
 

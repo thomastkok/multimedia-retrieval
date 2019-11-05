@@ -7,9 +7,10 @@ import trimesh
 
 from multimedia_retrieval.descriptors.descriptors import (
     compute_global_descriptors, compute_local_descriptors)
-from multimedia_retrieval.normalization.normalization import mesh_norm
-from .helpers import hist_convert
 from multimedia_retrieval.mesh_conversion.helpers import mesh_to_trimesh
+from multimedia_retrieval.normalization.normalization import mesh_norm
+
+from .helpers import hist_convert
 
 
 def read_mesh(file_path):
@@ -110,6 +111,7 @@ def read_dataset(dataset, file_path=None, n_meshes=None, features=False):
 
 
 def write_cache(features, paths, norm_info, datasets=['princeton', 'labeled']):
+    """Writes feature set, paths and normalization info to cache."""
     for dataset in datasets:
         features[dataset].to_csv(f'./cache/features_{dataset}.csv', sep='#',
                                  index=True)
@@ -118,6 +120,7 @@ def write_cache(features, paths, norm_info, datasets=['princeton', 'labeled']):
 
 
 def read_cache(datasets=['princeton', 'labeled']):
+    """Reads feature set, paths and normalization info from cache."""
     features = {}
     paths = {}
     norm_info = {}
@@ -140,6 +143,7 @@ def read_cache(datasets=['princeton', 'labeled']):
 
 
 def remove_flawed_meshes(dataset, file_path=None):
+    """Removes the flawed (not-watertight) meshes from a dataset."""
     if dataset == 'princeton':
         if not file_path:
             file_path = '../benchmark'

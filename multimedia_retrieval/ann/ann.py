@@ -1,28 +1,23 @@
+import pandas as pd
 from annoy import AnnoyIndex
 
-from multimedia_retrieval.datasets.datasets import read_dataset, read_mesh
 from multimedia_retrieval.matching.matching import compute_mesh_features
-
-from ..matching.distances import compare
-
-import random
-import numpy as np
-import pandas as pd
-
-# There are just two main parameters needed to tune Annoy:
-# the number of trees n_trees and
-# the number of nodes to inspect during searching search_k.
-
-# n_trees is provided during build time and
-# affects the build time and the index size.
-# A larger value will give more accurate results, but larger indexes.
-# search_k is provided in runtime and affects the search performance.
-# A larger value will give more accurate results,
-# but will take longer time to return.
 
 
 def approximate_nn(query_mesh, feature_db, number_trees,
                    search_k, top_k, norm_info, metric='angular'):
+    """
+    There are just two main parameters needed to tune Annoy:
+    the number of trees n_trees and
+    the number of nodes to inspect during searching search_k.
+
+    n_trees is provided during build time and
+    affects the build time and the index size.
+    A larger value will give more accurate results, but larger indexes.
+    search_k is provided in runtime and affects the search performance.
+    A larger value will give more accurate results,
+    but will take longer time to return.
+    """
     if not query_mesh.isdigit():
         query_mesh_features = compute_mesh_features(query_mesh, norm_info)
     else:

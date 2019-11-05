@@ -1,5 +1,6 @@
-import open3d
 import numpy as np
+import open3d
+
 from .helpers import unit_cube
 
 
@@ -43,7 +44,6 @@ def draw_mesh(mesh, draw_unit_cube=False, draw_coordinate_frame=False,
 def draw_meshes(meshes, draw_unit_cube=False, draw_coordinate_frame=False):
     """Draws a list of given meshes."""
     shapes = meshes
-    shapes.append(mesh_frame)
 
     if draw_unit_cube:
         shapes.append(unit_cube())

@@ -1,6 +1,7 @@
+import os
+
 import open3d
 import trimesh
-import os
 
 
 def mesh_to_trimesh(mesh):

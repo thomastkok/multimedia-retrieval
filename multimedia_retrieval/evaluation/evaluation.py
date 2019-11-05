@@ -1,15 +1,16 @@
 import matplotlib.pyplot as plt
-import seaborn as sn
 import numpy as np
 import pandas as pd
+import seaborn as sn
 from sklearn import metrics
 
-from .helpers import get_labels, plot_roc_curve, print_auc
-from multimedia_retrieval.matching.matching import query_shape
 from multimedia_retrieval.matching.distances import compare
+
+from .helpers import get_labels, print_auc
 
 
 def evaluate(features, paths, norm_info, dist_df):
+    """Evalutes the given feature set, and distance matrix."""
     shapes = features['labeled'].index
     labels = get_labels()
     classes = [labels[str(x)] for x in shapes]
@@ -19,6 +20,7 @@ def evaluate(features, paths, norm_info, dist_df):
 
 
 def plot_conf_matrix(features, dist_df):
+    """Plots a confusion matrix, given a distance matrix."""
     features = features['labeled']
     shapes = features.index
     labels = get_labels()
@@ -41,10 +43,12 @@ def plot_conf_matrix(features, dist_df):
 
 
 def get_dist_mat(features=None, cache=True):
+    """Either reads a distance matrix from cache, or generates one."""
     if cache:
         dist_df = pd.read_csv('./cache/dist_labeled.csv', sep='#', index_col=0)
     else:
-        dist_df = pd.DataFrame(np.zeros(shape=(380, 380)), columns=features.index)
+        dist_df = pd.DataFrame(np.zeros(shape=(380, 380)),
+                               columns=features.index)
         dist_df.index = features.index
 
         print('Creating distance matrix.')

@@ -1,5 +1,5 @@
-from numpy import std, mean, asarray
 import pandas as pd
+from numpy import asarray, mean, std
 
 
 def rescale(feature):

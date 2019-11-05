@@ -1,8 +1,6 @@
-import numpy as np
-import matplotlib.pyplot as plt
 import matplotlib.colors as mpl_colors
-
-from matplotlib import offsetbox
+import matplotlib.pyplot as plt
+import numpy as np
 
 from multimedia_retrieval.evaluation.evaluation import get_labels
 
@@ -67,7 +65,8 @@ def plot_embedding(X, labels, mesh_ids, nr_classes, title=None):
                          alpha=0.6, edgecolors='none')
 
     # Create tooltip with its properties for annotation.
-    annot = ax.annotate("", xy=(0, 0), xytext=(20, 20), textcoords="offset points",
+    annot = ax.annotate("", xy=(0, 0), xytext=(20, 20),
+                        textcoords="offset points",
                         bbox=dict(boxstyle="round", fc="w"),
                         arrowprops=dict(arrowstyle="->"))
     annot.set_visible(False)
@@ -98,7 +97,8 @@ def update_annot(scatter, annot, ind, norm, cmap, labels, mesh_ids, classes):
     annot.get_bbox_patch().set_alpha(0.6)
 
 
-def hover(fig, scatter, annot, ax, event, norm, cmap, labels, mesh_ids, classes):
+def hover(fig, scatter, annot, ax, event, norm, cmap,
+          labels, mesh_ids, classes):
     """
     Implements a hover event that call the update annot function.
     Continuously checks whether the mouse is on hovered on a point.
