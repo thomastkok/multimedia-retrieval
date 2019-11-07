@@ -10,6 +10,7 @@ Thomas Kok - 4124359
 ## Instructions for installation and execution
 
 To be able to use the program, the Labeled PSB dataset must be available.
+This dataset can be downloaded from [this location](https://people.cs.umass.edu/~kalo/papers/LabelMeshes/).
 This dataset must be located at the file path: `..\LabeledDB_new`.
 To illustrate, the directory structure must look as follows:
 ```
