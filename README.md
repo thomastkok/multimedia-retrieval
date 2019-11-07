@@ -7,6 +7,11 @@ The project for the course Multimedia Retrieval. Creating a 3D shape content-bas
 Ruben Schenkhuizen - 4115325
 Thomas Kok - 4124359
 
+## System information
+
+For our system, we used Python 3.6.8 and Windows 10.
+The performance of the project can not be guaranteed on other setups, but should work with Python 3.6+.
+
 ## Instructions for installation and execution
 
 To be able to use the program, the Labeled PSB dataset must be available.
@@ -38,6 +43,6 @@ mr
    ...
 ```
 
-Install packages with `make init` or `pip install -e .` and `pip install -r requirements.txt`.
+Install packages with `make init` or `pip install -r requirements.txt` and `pip install -e .`.
 
 Run the project with `make start` or `python -m multimedia_retrieval`.
